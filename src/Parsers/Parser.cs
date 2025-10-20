@@ -128,10 +128,33 @@ namespace Parser
         // Blocks
         public static void ParseStmtList(List<string> lines, BlockStmt stmt)
         {
+            SymbolTable<string, object> Data = new SymbolTable(); //just create a symbol table
             //line by line
-            //check for left parenthasi in first posifition
+            var tknzier = new TokenizerImpl();
+            List<Tokenizer.Token> content = [];
 
-            //if it is, feed line by line to parse statment untill a parethasi
+
+
+            foreach (string line in lines)
+            {
+                content = [];
+                content.AddRange(tknzier.Tokenize(line));
+                if (content[0]._tkntype == TokenType.LEFT_CURLY)
+                {
+                    ParseBlockStmt(lines.GetRange(1, lines.Count - 1), Data);
+                }
+                else if (content[0]._tkntype == TokenType.RIGHT_CURLY)       //add something to ensure balance
+                {
+                    ParseStmtList(lines.GetRange(1, lines.Count - 1), createBlockstatment(Data)); //write this correctly, and create BlockStmnt might need to be modified
+                }
+                else
+                {
+                    ParseStatement(content, Data);
+                }
+
+            }
+
+
             //if left parenthasi, call parseblockstatment
 
             //if right parenthasi, escape recursion by passing back all info in a symbol table, and it will return if list<string> is empty
