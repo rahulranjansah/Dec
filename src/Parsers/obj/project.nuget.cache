@@ -1,10 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xMJhGAZn7oQ=",
+  "dgSpecHash": "8huxGB1hwjQ=",
   "success": true,
-  "projectFilePath": "/mnt/hardisk/Dec/src/Parsers/Parsers.csproj",
-  "expectedPackageFiles": [
-    "/home/astavak/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.9/microsoft.aspnetcore.app.ref.9.0.9.nupkg.sha512"
-  ],
+  "projectFilePath": "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Parsers\\Parsers.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }

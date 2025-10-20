@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/mnt/hardisk/Dec/src/Parsers/Parsers.csproj": {}
+    "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Parsers\\Parsers.csproj": {}
   },
   "projects": {
-    "/mnt/hardisk/Dec/src/AST/AST.csproj": {
+    "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\AST\\AST.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/hardisk/Dec/src/AST/AST.csproj",
+        "projectUniqueName": "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\AST\\AST.csproj",
         "projectName": "AST",
-        "projectPath": "/mnt/hardisk/Dec/src/AST/AST.csproj",
-        "packagesPath": "/home/astavak/.nuget/packages/",
-        "outputPath": "/mnt/hardisk/Dec/src/AST/obj/",
+        "projectPath": "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\AST\\AST.csproj",
+        "packagesPath": "C:\\Users\\rickt\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\AST\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/astavak/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\rickt\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -26,8 +26,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "/mnt/hardisk/Dec/src/Utilities/Utilities.csproj": {
-                "projectPath": "/mnt/hardisk/Dec/src/Utilities/Utilities.csproj"
+              "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Utilities\\Utilities.csproj": {
+                "projectPath": "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Utilities\\Utilities.csproj"
               }
             }
           }
@@ -42,7 +42,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
@@ -58,32 +58,26 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[9.0.9, 9.0.9]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.110/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/mnt/hardisk/Dec/src/Parsers/Parsers.csproj": {
+    "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Parsers\\Parsers.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/hardisk/Dec/src/Parsers/Parsers.csproj",
+        "projectUniqueName": "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Parsers\\Parsers.csproj",
         "projectName": "Parsers",
-        "projectPath": "/mnt/hardisk/Dec/src/Parsers/Parsers.csproj",
-        "packagesPath": "/home/astavak/.nuget/packages/",
-        "outputPath": "/mnt/hardisk/Dec/src/Parsers/obj/",
+        "projectPath": "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Parsers\\Parsers.csproj",
+        "packagesPath": "C:\\Users\\rickt\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Parsers\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/astavak/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\rickt\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -95,14 +89,14 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "/mnt/hardisk/Dec/src/AST/AST.csproj": {
-                "projectPath": "/mnt/hardisk/Dec/src/AST/AST.csproj"
+              "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\AST\\AST.csproj": {
+                "projectPath": "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\AST\\AST.csproj"
               },
-              "/mnt/hardisk/Dec/src/Tokenizer/Tokenizer.csproj": {
-                "projectPath": "/mnt/hardisk/Dec/src/Tokenizer/Tokenizer.csproj"
+              "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Tokenizer\\Tokenizer.csproj": {
+                "projectPath": "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Tokenizer\\Tokenizer.csproj"
               },
-              "/mnt/hardisk/Dec/src/Utilities/Utilities.csproj": {
-                "projectPath": "/mnt/hardisk/Dec/src/Utilities/Utilities.csproj"
+              "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Utilities\\Utilities.csproj": {
+                "projectPath": "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Utilities\\Utilities.csproj"
               }
             }
           }
@@ -117,7 +111,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
@@ -133,32 +127,26 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[9.0.9, 9.0.9]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.110/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/mnt/hardisk/Dec/src/Tokenizer/Tokenizer.csproj": {
+    "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Tokenizer\\Tokenizer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/hardisk/Dec/src/Tokenizer/Tokenizer.csproj",
+        "projectUniqueName": "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Tokenizer\\Tokenizer.csproj",
         "projectName": "Tokenizer",
-        "projectPath": "/mnt/hardisk/Dec/src/Tokenizer/Tokenizer.csproj",
-        "packagesPath": "/home/astavak/.nuget/packages/",
-        "outputPath": "/mnt/hardisk/Dec/src/Tokenizer/obj/",
+        "projectPath": "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Tokenizer\\Tokenizer.csproj",
+        "packagesPath": "C:\\Users\\rickt\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Tokenizer\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/astavak/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\rickt\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -182,7 +170,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
@@ -198,32 +186,26 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[9.0.9, 9.0.9]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.110/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/mnt/hardisk/Dec/src/Utilities/Utilities.csproj": {
+    "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Utilities\\Utilities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/hardisk/Dec/src/Utilities/Utilities.csproj",
+        "projectUniqueName": "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Utilities\\Utilities.csproj",
         "projectName": "Utilities",
-        "projectPath": "/mnt/hardisk/Dec/src/Utilities/Utilities.csproj",
-        "packagesPath": "/home/astavak/.nuget/packages/",
-        "outputPath": "/mnt/hardisk/Dec/src/Utilities/obj/",
+        "projectPath": "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Utilities\\Utilities.csproj",
+        "packagesPath": "C:\\Users\\rickt\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\rickt\\OneDrive\\Documents\\CSC-223 Rahul\\Dec\\src\\Utilities\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/astavak/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\rickt\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -247,7 +229,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
@@ -263,18 +245,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[9.0.9, 9.0.9]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.110/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
