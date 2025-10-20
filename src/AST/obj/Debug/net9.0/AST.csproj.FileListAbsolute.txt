@@ -1,0 +1,15 @@
+/mnt/hardisk/Dec/src/AST/bin/Debug/net9.0/AST.deps.json
+/mnt/hardisk/Dec/src/AST/bin/Debug/net9.0/AST.dll
+/mnt/hardisk/Dec/src/AST/bin/Debug/net9.0/AST.pdb
+/mnt/hardisk/Dec/src/AST/bin/Debug/net9.0/Utilities.dll
+/mnt/hardisk/Dec/src/AST/bin/Debug/net9.0/Utilities.pdb
+/mnt/hardisk/Dec/src/AST/obj/Debug/net9.0/AST.csproj.AssemblyReference.cache
+/mnt/hardisk/Dec/src/AST/obj/Debug/net9.0/AST.GeneratedMSBuildEditorConfig.editorconfig
+/mnt/hardisk/Dec/src/AST/obj/Debug/net9.0/AST.AssemblyInfoInputs.cache
+/mnt/hardisk/Dec/src/AST/obj/Debug/net9.0/AST.AssemblyInfo.cs
+/mnt/hardisk/Dec/src/AST/obj/Debug/net9.0/AST.csproj.CoreCompileInputs.cache
+/mnt/hardisk/Dec/src/AST/obj/Debug/net9.0/AST.csproj.Up2Date
+/mnt/hardisk/Dec/src/AST/obj/Debug/net9.0/AST.dll
+/mnt/hardisk/Dec/src/AST/obj/Debug/net9.0/refint/AST.dll
+/mnt/hardisk/Dec/src/AST/obj/Debug/net9.0/AST.pdb
+/mnt/hardisk/Dec/src/AST/obj/Debug/net9.0/ref/AST.dll
