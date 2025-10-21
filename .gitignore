@@ -1,2 +1,21 @@
-bin/
-obj/
+# Ignore build output
+**/bin/
+**/obj/
+
+# Visual Studio / VS Code cruft
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build artifacts
+*.dll
+*.pdb
+*.cache
+*.log
+
+# Test results
+TestResult*/
+*.coverage
