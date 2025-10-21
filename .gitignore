@@ -19,3 +19,8 @@
 # Test results
 TestResult*/
 *.coverage
+
+src/*/obj/
+src/*/bin
+tests/*/obj
+tests/*/bin
