@@ -93,6 +93,7 @@
 /mnt/hardisk/Dec/tests/Utilities.Tests/obj/Debug/net9.0/Utilities.Tests.AssemblyInfoInputs.cache
 /mnt/hardisk/Dec/tests/Utilities.Tests/obj/Debug/net9.0/Utilities.Tests.AssemblyInfo.cs
 /mnt/hardisk/Dec/tests/Utilities.Tests/obj/Debug/net9.0/Utilities.Tests.csproj.CoreCompileInputs.cache
+/mnt/hardisk/Dec/tests/Utilities.Tests/obj/Debug/net9.0/Utilities.Tests.sourcelink.json
 /mnt/hardisk/Dec/tests/Utilities.Tests/obj/Debug/net9.0/Utilitie.049D571B.Up2Date
 /mnt/hardisk/Dec/tests/Utilities.Tests/obj/Debug/net9.0/Utilities.Tests.dll
 /mnt/hardisk/Dec/tests/Utilities.Tests/obj/Debug/net9.0/refint/Utilities.Tests.dll

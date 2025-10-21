@@ -10,6 +10,7 @@
 /mnt/hardisk/Dec/src/Builders/obj/Debug/net9.0/Builders.AssemblyInfoInputs.cache
 /mnt/hardisk/Dec/src/Builders/obj/Debug/net9.0/Builders.AssemblyInfo.cs
 /mnt/hardisk/Dec/src/Builders/obj/Debug/net9.0/Builders.csproj.CoreCompileInputs.cache
+/mnt/hardisk/Dec/src/Builders/obj/Debug/net9.0/Builders.sourcelink.json
 /mnt/hardisk/Dec/src/Builders/obj/Debug/net9.0/Builders.csproj.Up2Date
 /mnt/hardisk/Dec/src/Builders/obj/Debug/net9.0/Builders.dll
 /mnt/hardisk/Dec/src/Builders/obj/Debug/net9.0/refint/Builders.dll

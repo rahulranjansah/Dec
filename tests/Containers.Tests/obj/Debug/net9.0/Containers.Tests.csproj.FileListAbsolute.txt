@@ -1,3 +1,9 @@
+/mnt/hardisk/Dec/tests/Containers.Tests/obj/Debug/net9.0/Containers.Tests.csproj.AssemblyReference.cache
+/mnt/hardisk/Dec/tests/Containers.Tests/obj/Debug/net9.0/Containers.Tests.GeneratedMSBuildEditorConfig.editorconfig
+/mnt/hardisk/Dec/tests/Containers.Tests/obj/Debug/net9.0/Containers.Tests.AssemblyInfoInputs.cache
+/mnt/hardisk/Dec/tests/Containers.Tests/obj/Debug/net9.0/Containers.Tests.AssemblyInfo.cs
+/mnt/hardisk/Dec/tests/Containers.Tests/obj/Debug/net9.0/Containers.Tests.csproj.CoreCompileInputs.cache
+/mnt/hardisk/Dec/tests/Containers.Tests/obj/Debug/net9.0/Containers.Tests.sourcelink.json
 /mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/.msCoverageSourceRootsMapping_Containers.Tests
 /mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/CoverletSourceRootsMapping_Containers.Tests
 /mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/xunit.runner.visualstudio.testadapter.dll
@@ -86,13 +92,8 @@
 /mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/zh-Hant/Microsoft.TestPlatform.CommunicationUtilities.resources.dll
 /mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/zh-Hant/Microsoft.TestPlatform.CrossPlatEngine.resources.dll
 /mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/zh-Hant/Microsoft.VisualStudio.TestPlatform.Common.resources.dll
-/mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/Utilities.dll
-/mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/Utilities.pdb
-/mnt/hardisk/Dec/tests/Containers.Tests/obj/Debug/net9.0/Containers.Tests.csproj.AssemblyReference.cache
-/mnt/hardisk/Dec/tests/Containers.Tests/obj/Debug/net9.0/Containers.Tests.GeneratedMSBuildEditorConfig.editorconfig
-/mnt/hardisk/Dec/tests/Containers.Tests/obj/Debug/net9.0/Containers.Tests.AssemblyInfoInputs.cache
-/mnt/hardisk/Dec/tests/Containers.Tests/obj/Debug/net9.0/Containers.Tests.AssemblyInfo.cs
-/mnt/hardisk/Dec/tests/Containers.Tests/obj/Debug/net9.0/Containers.Tests.csproj.CoreCompileInputs.cache
+/mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/Containers.dll
+/mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/Containers.pdb
 /mnt/hardisk/Dec/tests/Containers.Tests/obj/Debug/net9.0/Containe.3EDB9214.Up2Date
 /mnt/hardisk/Dec/tests/Containers.Tests/obj/Debug/net9.0/Containers.Tests.dll
 /mnt/hardisk/Dec/tests/Containers.Tests/obj/Debug/net9.0/refint/Containers.Tests.dll

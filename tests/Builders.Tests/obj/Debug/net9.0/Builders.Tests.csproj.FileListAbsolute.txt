@@ -97,6 +97,7 @@
 /mnt/hardisk/Dec/tests/Builders.Tests/obj/Debug/net9.0/Builders.Tests.AssemblyInfoInputs.cache
 /mnt/hardisk/Dec/tests/Builders.Tests/obj/Debug/net9.0/Builders.Tests.AssemblyInfo.cs
 /mnt/hardisk/Dec/tests/Builders.Tests/obj/Debug/net9.0/Builders.Tests.csproj.CoreCompileInputs.cache
+/mnt/hardisk/Dec/tests/Builders.Tests/obj/Debug/net9.0/Builders.Tests.sourcelink.json
 /mnt/hardisk/Dec/tests/Builders.Tests/obj/Debug/net9.0/Builders.9465504E.Up2Date
 /mnt/hardisk/Dec/tests/Builders.Tests/obj/Debug/net9.0/Builders.Tests.dll
 /mnt/hardisk/Dec/tests/Builders.Tests/obj/Debug/net9.0/refint/Builders.Tests.dll

@@ -8,8 +8,8 @@
     ".NETCoreApp,Version=v9.0": {
       "Containers.Tests/1.0.0": {
         "dependencies": {
+          "Containers": "1.0.0",
           "Microsoft.NET.Test.Sdk": "17.12.0",
-          "Utilities": "1.0.0",
           "coverlet.collector": "6.0.2",
           "xunit": "2.9.2",
           "xunit.runner.visualstudio": "2.8.2"
@@ -341,9 +341,9 @@
         }
       },
       "xunit.runner.visualstudio/2.8.2": {},
-      "Utilities/1.0.0": {
+      "Containers/1.0.0": {
         "runtime": {
-          "Utilities.dll": {
+          "Containers.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -462,7 +462,7 @@
       "path": "xunit.runner.visualstudio/2.8.2",
       "hashPath": "xunit.runner.visualstudio.2.8.2.nupkg.sha512"
     },
-    "Utilities/1.0.0": {
+    "Containers/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

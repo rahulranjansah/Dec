@@ -19,8 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- <ProjectReference Include="..\..\src\Utilities\Containers\Containers.csproj" /> -->
-    <ProjectReference Include="../../src/Utilities/Utilities.csproj" />
+    <ProjectReference Include="..\..\src\Containers\Containers.csproj" />
   </ItemGroup>
 
 </Project>

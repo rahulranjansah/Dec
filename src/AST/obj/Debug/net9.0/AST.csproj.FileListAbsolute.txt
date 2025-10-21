@@ -8,6 +8,7 @@
 /mnt/hardisk/Dec/src/AST/obj/Debug/net9.0/AST.AssemblyInfoInputs.cache
 /mnt/hardisk/Dec/src/AST/obj/Debug/net9.0/AST.AssemblyInfo.cs
 /mnt/hardisk/Dec/src/AST/obj/Debug/net9.0/AST.csproj.CoreCompileInputs.cache
+/mnt/hardisk/Dec/src/AST/obj/Debug/net9.0/AST.sourcelink.json
 /mnt/hardisk/Dec/src/AST/obj/Debug/net9.0/AST.csproj.Up2Date
 /mnt/hardisk/Dec/src/AST/obj/Debug/net9.0/AST.dll
 /mnt/hardisk/Dec/src/AST/obj/Debug/net9.0/refint/AST.dll

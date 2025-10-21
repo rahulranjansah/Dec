@@ -95,6 +95,7 @@
 /mnt/hardisk/Dec/tests/AST.Tests/obj/Debug/net9.0/AST.Tests.AssemblyInfoInputs.cache
 /mnt/hardisk/Dec/tests/AST.Tests/obj/Debug/net9.0/AST.Tests.AssemblyInfo.cs
 /mnt/hardisk/Dec/tests/AST.Tests/obj/Debug/net9.0/AST.Tests.csproj.CoreCompileInputs.cache
+/mnt/hardisk/Dec/tests/AST.Tests/obj/Debug/net9.0/AST.Tests.sourcelink.json
 /mnt/hardisk/Dec/tests/AST.Tests/obj/Debug/net9.0/AST.Tests.csproj.Up2Date
 /mnt/hardisk/Dec/tests/AST.Tests/obj/Debug/net9.0/AST.Tests.dll
 /mnt/hardisk/Dec/tests/AST.Tests/obj/Debug/net9.0/refint/AST.Tests.dll

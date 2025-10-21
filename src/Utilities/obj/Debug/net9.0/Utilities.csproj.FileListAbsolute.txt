@@ -5,6 +5,7 @@
 /mnt/hardisk/Dec/src/Utilities/obj/Debug/net9.0/Utilities.AssemblyInfoInputs.cache
 /mnt/hardisk/Dec/src/Utilities/obj/Debug/net9.0/Utilities.AssemblyInfo.cs
 /mnt/hardisk/Dec/src/Utilities/obj/Debug/net9.0/Utilities.csproj.CoreCompileInputs.cache
+/mnt/hardisk/Dec/src/Utilities/obj/Debug/net9.0/Utilities.sourcelink.json
 /mnt/hardisk/Dec/src/Utilities/obj/Debug/net9.0/Utilities.dll
 /mnt/hardisk/Dec/src/Utilities/obj/Debug/net9.0/refint/Utilities.dll
 /mnt/hardisk/Dec/src/Utilities/obj/Debug/net9.0/Utilities.pdb
