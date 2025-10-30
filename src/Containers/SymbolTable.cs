@@ -6,7 +6,10 @@ using System.Security.Cryptography.X509Certificates;
 /// <summary>
 /// A hierarchical symbol table that supports parent-child relationships for scope resolution
 /// </summary>
-public class SymbolTable<TKey, TValue> : IDictionary<TKey, TValue> //make parent proerty
+///
+namespace Containers
+{
+   public class SymbolTable<TKey, TValue> : IDictionary<TKey, TValue> //make parent proerty
 {
     // Parallel data structures to maintain key-value pairs
     private DLL<TKey> _keys;
@@ -227,4 +230,5 @@ public class SymbolTable<TKey, TValue> : IDictionary<TKey, TValue> //make parent
         value = default(TValue);
         return false;
     }
+}
 }

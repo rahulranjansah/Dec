@@ -425,11 +425,22 @@
           "bin/placeholder/AST.dll": {}
         }
       },
+      "Containers/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/Containers.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Containers.dll": {}
+        }
+      },
       "Parsers/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
           "AST": "1.0.0",
+          "Containers": "1.0.0",
           "Tokenizer": "1.0.0",
           "Utilities": "1.0.0"
         },
@@ -985,6 +996,11 @@
       "type": "project",
       "path": "../../src/AST/AST.csproj",
       "msbuildProject": "../../src/AST/AST.csproj"
+    },
+    "Containers/1.0.0": {
+      "type": "project",
+      "path": "../../src/Containers/Containers.csproj",
+      "msbuildProject": "../../src/Containers/Containers.csproj"
     },
     "Parsers/1.0.0": {
       "type": "project",

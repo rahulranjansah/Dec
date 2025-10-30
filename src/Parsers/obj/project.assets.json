@@ -15,6 +15,16 @@
           "bin/placeholder/AST.dll": {}
         }
       },
+      "Containers/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/Containers.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Containers.dll": {}
+        }
+      },
       "Tokenizer/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
@@ -43,6 +53,11 @@
       "path": "../AST/AST.csproj",
       "msbuildProject": "../AST/AST.csproj"
     },
+    "Containers/1.0.0": {
+      "type": "project",
+      "path": "../Containers/Containers.csproj",
+      "msbuildProject": "../Containers/Containers.csproj"
+    },
     "Tokenizer/1.0.0": {
       "type": "project",
       "path": "../Tokenizer/Tokenizer.csproj",
@@ -57,6 +72,7 @@
   "projectFileDependencyGroups": {
     "net9.0": [
       "AST >= 1.0.0",
+      "Containers >= 1.0.0",
       "Tokenizer >= 1.0.0",
       "Utilities >= 1.0.0"
     ]
@@ -88,6 +104,9 @@
           "projectReferences": {
             "/mnt/hardisk/Dec/src/AST/AST.csproj": {
               "projectPath": "/mnt/hardisk/Dec/src/AST/AST.csproj"
+            },
+            "/mnt/hardisk/Dec/src/Containers/Containers.csproj": {
+              "projectPath": "/mnt/hardisk/Dec/src/Containers/Containers.csproj"
             },
             "/mnt/hardisk/Dec/src/Tokenizer/Tokenizer.csproj": {
               "projectPath": "/mnt/hardisk/Dec/src/Tokenizer/Tokenizer.csproj"

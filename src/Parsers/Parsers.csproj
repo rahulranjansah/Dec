@@ -4,6 +4,7 @@
     <ProjectReference Include="..\AST\AST.csproj" />
     <ProjectReference Include="..\Tokenizer\Tokenizer.csproj" />
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
+    <ProjectReference Include="..\Containers\Containers.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
