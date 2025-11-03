@@ -343,6 +343,7 @@
       "xunit.runner.visualstudio/2.8.2": {},
       "AST/1.0.0": {
         "dependencies": {
+          "Containers": "1.0.0",
           "Utilities": "1.0.0"
         },
         "runtime": {
@@ -358,6 +359,14 @@
         },
         "runtime": {
           "Builders.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Containers/1.0.0": {
+        "runtime": {
+          "Containers.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -490,6 +499,11 @@
       "sha512": ""
     },
     "Builders/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Containers/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

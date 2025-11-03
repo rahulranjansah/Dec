@@ -27,7 +27,8 @@ namespace Tokenizer
         LEFT_PAREN,   // Opening parenthesis "("
         RIGHT_PAREN,  // Closing parenthesis ")"
         LEFT_CURLY,   // Opening curly brace "{"
-        RIGHT_CURLY   // Closing curly brace "}"
+        RIGHT_CURLY,   // Closing curly brace "}"
+        UNKNOWN        // Random undefined value
     }
 
     /// <summary>

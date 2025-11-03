@@ -26,6 +26,9 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
+              "/mnt/hardisk/Dec/src/Containers/Containers.csproj": {
+                "projectPath": "/mnt/hardisk/Dec/src/Containers/Containers.csproj"
+              },
               "/mnt/hardisk/Dec/src/Utilities/Utilities.csproj": {
                 "projectPath": "/mnt/hardisk/Dec/src/Utilities/Utilities.csproj"
               }

@@ -102,3 +102,5 @@
 /mnt/hardisk/Dec/tests/AST.Tests/obj/Debug/net9.0/AST.Tests.pdb
 /mnt/hardisk/Dec/tests/AST.Tests/obj/Debug/net9.0/AST.Tests.genruntimeconfig.cache
 /mnt/hardisk/Dec/tests/AST.Tests/obj/Debug/net9.0/ref/AST.Tests.dll
+/mnt/hardisk/Dec/tests/AST.Tests/bin/Debug/net9.0/Containers.dll
+/mnt/hardisk/Dec/tests/AST.Tests/bin/Debug/net9.0/Containers.pdb

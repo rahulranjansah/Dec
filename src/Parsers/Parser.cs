@@ -33,7 +33,7 @@ namespace Parser
 
         // expressions from test it looks like: new[] { "(", "8", "/", "2", ")" }
         // non-recursive but innermost only
-        public static AST.ExpressionNode ParseExpression(List<Token> expression)
+        private static AST.ExpressionNode ParseExpression(List<Token> expression)
         {
             // check one case other recursion will do
             if (expression.Count < 3) { throw new ParseException("Too small expression to work with"); }
@@ -46,7 +46,7 @@ namespace Parser
             return ParseExpressionContent(expression.GetRange(1, expression.Count - 2));
         }
 
-        public static AST.ExpressionNode ParseExpressionContent(List<Tokenizer.Token> content)
+        private static AST.ExpressionNode ParseExpressionContent(List<Tokenizer.Token> content)
         {
             //keep track of a left and right and call cbn on them
             if (content.Count == 0) { throw new ParseException("No content"); }
@@ -82,7 +82,7 @@ namespace Parser
         }
 
 
-        public static AST.ExpressionNode HandleSingleToken(Tokenizer.Token token)
+        private static AST.ExpressionNode HandleSingleToken(Tokenizer.Token token)
         {
             if (token._tkntype == TokenType.INTEGER) { return new LiteralNode(token._value); }
             if (token._tkntype == TokenType.FLOAT) { return new LiteralNode(token._value); }
@@ -90,7 +90,7 @@ namespace Parser
             throw new ParseException("Unexpected token may not not float or integer or variable");
         }
 
-        public static AST.ExpressionNode CreateBinaryOperatorNode(string op, AST.ExpressionNode l, AST.ExpressionNode r)
+        private static AST.ExpressionNode CreateBinaryOperatorNode(string op, AST.ExpressionNode l, AST.ExpressionNode r)
         {
             if (op == TokenConstants.PLUS) { return new AST.PlusNode(l, r); }
             if (op == TokenConstants.MINUS) { return new AST.MinusNode(l, r); }
@@ -103,14 +103,14 @@ namespace Parser
             throw new ParseException($"Invalid operator has been used: {op}");
         }
 
-        public static AST.VariableNode ParseVariableNode(string variable)
+        private static AST.VariableNode ParseVariableNode(string variable)
         {
             if (variable == null) { throw new ParseException("Variable is null"); }
             return new AST.VariableNode(variable);
         }
 
         // Individual Statements
-        public static AST.AssignmentStmt ParseAssignmentStmt(List<Tokenizer.Token> content, SymbolTable<string, object> keyval)
+        private static AST.AssignmentStmt ParseAssignmentStmt(List<Tokenizer.Token> content, SymbolTable<string, object> keyval)
         {
             if (content.Count < 3) throw new ParseException("Assignement statement al least need three tokens");
 
@@ -119,12 +119,12 @@ namespace Parser
             {
                 keyval.Keys.Add(content[0]._value);
                 // keyval.Values.Add(null);
-                return new AST.AssignmentStmt(ParseVariableNode(content[0]._value), ParseExpression(content.GetRange(2, content.Count - 1)));
+                return new AST.AssignmentStmt(ParseVariableNode(content[0]._value), ParseExpression(content.GetRange(2, content.Count - 2)));
             }
             throw new ParseException("Assignement statement must have an assignment operator");
         }
 
-        public static AST.ReturnStmt ParseReturnStatement(List<Tokenizer.Token> content)
+        private static AST.ReturnStmt ParseReturnStatement(List<Tokenizer.Token> content)
         {
             if (content.Count < 2) { throw new ParseException("Return statement must have at least two tokens"); }
 
@@ -135,10 +135,10 @@ namespace Parser
             throw new ParseException("Return statement must start with return keyword");
         }
 
-        public static AST.Statement ParseStatement(List<Tokenizer.Token> content, SymbolTable<string, object> keyval)
+        private static AST.Statement ParseStatement(List<Tokenizer.Token> content, SymbolTable<string, object> keyval)
         {
             if (content[0]._tkntype == TokenType.RETURN) { return ParseReturnStatement(content); }
-            if (content[0]._tkntype == TokenType.ASSIGNMENT)
+            if (content.Count > 1 && content[1]._tkntype == TokenType.ASSIGNMENT)
             {
                 return ParseAssignmentStmt(content, keyval);
             }
@@ -147,7 +147,7 @@ namespace Parser
 
         //if right parenthasi, escape recursion by passing back all info in a symbol table, and it will return if list<string> is empty
         // }
-        public static void ParseStmtList(List<string> lines, BlockStmt stmt)
+        private static void ParseStmtList(List<string> lines, BlockStmt stmt)
         {
             SymbolTable<string, object> Data = new SymbolTable<string, object>();
 
@@ -184,7 +184,7 @@ namespace Parser
                         }
                         lineBeingEaten++;
                     }
-                    i += lineBeingEaten;
+                    i = lineBeingEaten;
 
                 }
                 else if (content[0]._tkntype == TokenType.RIGHT_CURLY)
@@ -200,7 +200,31 @@ namespace Parser
             }
         }
 
-        public static AST.BlockStmt ParseBlockStmt(List<string> lines, SymbolTable<string, object> keyval)
+        // public static AST.BlockStmt ParseBlockStmt(List<string> lines, SymbolTable<string, object> keyval)
+        // {
+        //     if (lines.Count == 0) { throw new ParseException("No strings"); }
+
+        //     var tknzier = new TokenizerImpl();
+        //     List<Tokenizer.Token> content = [];
+
+        //     content.AddRange(tknzier.Tokenize(lines[0]));
+        //     content.AddRange(tknzier.Tokenize(lines[lines.Count - 1]));
+
+        //     if (content[0]._tkntype != TokenType.LEFT_CURLY || content[1]._tkntype != TokenType.RIGHT_CURLY)
+        //     {
+        //         throw new ParseException("Block must start with '{' and end with '}'");
+        //     }
+
+        //     List<AST.Statement> Block = new List<Statement>();
+
+        //     SymbolTable<string, object> blockscope = new SymbolTable<string, object>(keyval);
+        //     ParseStmtList(lines.GetRange(1, lines.Count - 1), Block);
+
+        //     return Block;
+
+        // }
+
+        private static AST.BlockStmt ParseBlockStmt(List<string> lines, SymbolTable<string, object> keyval)
         {
             if (lines.Count == 0) { throw new ParseException("No strings"); }
 
@@ -210,18 +234,22 @@ namespace Parser
             content.AddRange(tknzier.Tokenize(lines[0]));
             content.AddRange(tknzier.Tokenize(lines[lines.Count - 1]));
 
-            if (content[0]._tkntype != TokenType.LEFT_CURLY || content[1]._tkntype != TokenType.RIGHT_CURLY)
+            if (content.Count != 2 ||
+                content[0]._tkntype != TokenType.LEFT_CURLY ||
+                content[1]._tkntype != TokenType.RIGHT_CURLY)
             {
                 throw new ParseException("Block must start with '{' and end with '}'");
             }
 
-            SymbolTable<string, object> blockScope = new SymbolTable<string, object>(keyval); //how to use symbol table here?
-            AST.BlockStmt Block = new BlockStmt([]);
+            // Create the BlockStmt first
+            AST.BlockStmt block = new BlockStmt([]);
 
-            ParseStmtList(lines.GetRange(1, lines.Count - 1), Block);
+            SymbolTable<string, object> blockscope = new SymbolTable<string, object>(keyval);
 
-            return Block;
+            // Parse the statements directly into the block
+            ParseStmtList(lines.GetRange(1, lines.Count - 1), block);
 
+            return block;
         }
     }
 }

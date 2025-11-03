@@ -36,7 +36,29 @@ namespace Containers
     /// <summary>
     /// Implements hierarchical lookup: searches local table first, then parent chain
     /// </summary>
-    bool IDictionary<TKey, TValue>.TryGetValue(TKey key, out TValue value)
+    // bool IDictionary<TKey, TValue>.TryGetValue(TKey key, out TValue value)
+    // {
+    //     TValue LocalValue = default(TValue);
+
+    //     // First check local scope
+    //     if (this.TryGetValueLocal(key, out LocalValue))
+    //     {
+    //         value = LocalValue;
+    //         return true;
+    //     }
+
+    //     // If not found locally, recurse up the parent chain
+    //     if (this._parent != null)
+    //     {
+    //         return ((IDictionary<TKey, TValue>)this._parent).TryGetValue(key, out value);
+    //     }
+
+    //     // Key not found in any scope
+    //     value = default(TValue);
+    //     return false;
+    // }
+
+    public bool TryGetValue(TKey key, out TValue value)
     {
         TValue LocalValue = default(TValue);
 
@@ -50,13 +72,15 @@ namespace Containers
         // If not found locally, recurse up the parent chain
         if (this._parent != null)
         {
-            return ((IDictionary<TKey, TValue>)this._parent).TryGetValue(key, out value);
+            return this._parent.TryGetValue(key, out value);
         }
 
         // Key not found in any scope
         value = default(TValue);
         return false;
     }
+
+
 
     public void Add(KeyValuePair<TKey, TValue> item)
     {

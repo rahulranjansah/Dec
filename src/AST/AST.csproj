@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
+    <ProjectReference Include="..\Containers\Containers.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -6,6 +6,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
+          "Containers": "1.0.0",
           "Utilities": "1.0.0"
         },
         "compile": {

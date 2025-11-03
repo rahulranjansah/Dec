@@ -104,3 +104,5 @@
 /mnt/hardisk/Dec/tests/Builders.Tests/obj/Debug/net9.0/Builders.Tests.pdb
 /mnt/hardisk/Dec/tests/Builders.Tests/obj/Debug/net9.0/Builders.Tests.genruntimeconfig.cache
 /mnt/hardisk/Dec/tests/Builders.Tests/obj/Debug/net9.0/ref/Builders.Tests.dll
+/mnt/hardisk/Dec/tests/Builders.Tests/bin/Debug/net9.0/Containers.dll
+/mnt/hardisk/Dec/tests/Builders.Tests/bin/Debug/net9.0/Containers.pdb

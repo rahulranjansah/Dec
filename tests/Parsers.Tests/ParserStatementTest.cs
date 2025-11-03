@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Xunit;
 using AST;
 using Tokenizer;
+using Containers;
 using System.Reflection;
 
 namespace Parser.Tests
@@ -19,29 +20,29 @@ namespace Parser.Tests
             }
             return tokens;
         }
-        
+
         // Helper method to invoke the private ParseReturnStatement method using reflection
         private ReturnStmt InvokeParseReturnStatement(List<Token> tokens)
         {
             Type parserType = typeof(Parser);
-            MethodInfo methodInfo = parserType.GetMethod("ParseReturnStatement", 
+            MethodInfo methodInfo = parserType.GetMethod("ParseReturnStatement",
                 BindingFlags.NonPublic | BindingFlags.Static);
-            
+
             return (ReturnStmt)methodInfo.Invoke(null, new object[] { tokens });
         }
-        
+
         // Helper method to invoke the private ParseAssignmentStmt method using reflection
         private AssignmentStmt InvokeParseAssignmentStmt(List<Token> tokens, SymbolTable<string, object> symbolTable)
         {
             Type parserType = typeof(Parser);
-            MethodInfo methodInfo = parserType.GetMethod("ParseAssignmentStmt", 
+            MethodInfo methodInfo = parserType.GetMethod("ParseAssignmentStmt",
                 BindingFlags.NonPublic | BindingFlags.Static);
-            
+
             return (AssignmentStmt)methodInfo.Invoke(null, new object[] { tokens, symbolTable });
         }
-        
+
         #region ReturnStatement Tests
-        
+
         [Fact]
         public void ParseReturnStatement_SimpleIntegerLiteral_ReturnsCorrectNode()
         {
@@ -58,11 +59,11 @@ namespace Parser.Tests
             Assert.NotNull(result);
             Assert.NotNull(result.Expression);
             Assert.IsType<LiteralNode>(result.Expression);
-            
+
             var literalNode = (LiteralNode)result.Expression;
             Assert.Equal(42, literalNode.Value);
         }
-        
+
         [Fact]
         public void ParseReturnStatement_SimpleFloatLiteral_ReturnsCorrectNode()
         {
@@ -79,11 +80,11 @@ namespace Parser.Tests
             Assert.NotNull(result);
             Assert.NotNull(result.Expression);
             Assert.IsType<LiteralNode>(result.Expression);
-            
+
             var literalNode = (LiteralNode)result.Expression;
             Assert.Equal(3.14, literalNode.Value);
         }
-        
+
         [Fact]
         public void ParseReturnStatement_SimpleVariable_ReturnsCorrectNode()
         {
@@ -100,11 +101,11 @@ namespace Parser.Tests
             Assert.NotNull(result);
             Assert.NotNull(result.Expression);
             Assert.IsType<VariableNode>(result.Expression);
-            
+
             var variableNode = (VariableNode)result.Expression;
             Assert.Equal("x", variableNode.Name);
         }
-        
+
         [Fact]
         public void ParseReturnStatement_BinaryOperation_ReturnsCorrectNode()
         {
@@ -122,18 +123,18 @@ namespace Parser.Tests
             Assert.NotNull(result.Expression);
             Assert.IsType<PlusNode>(result.Expression);
         }
-        
+
         [Fact]
         public void ParseReturnStatement_NestedExpression_ReturnsCorrectNode()
         {
             // Arrange - Note: Nested operations format: (x + (y * z))
             var tokens = CreateTokens(
                 new[] { "return", "(", "x", "+", "(", "y", "*", "z", ")", ")" },
-                new[] { 
-                    TokenType.RETURN, 
-                    TokenType.LEFT_PAREN, TokenType.VARIABLE, TokenType.OPERATOR, 
+                new[] {
+                    TokenType.RETURN,
+                    TokenType.LEFT_PAREN, TokenType.VARIABLE, TokenType.OPERATOR,
                     TokenType.LEFT_PAREN, TokenType.VARIABLE, TokenType.OPERATOR, TokenType.VARIABLE, TokenType.RIGHT_PAREN,
-                    TokenType.RIGHT_PAREN 
+                    TokenType.RIGHT_PAREN
                 }
             );
 
@@ -145,7 +146,7 @@ namespace Parser.Tests
             Assert.NotNull(result.Expression);
             Assert.IsType<PlusNode>(result.Expression);
         }
-        
+
         [Fact]
         public void ParseReturnStatement_MissingExpression_ThrowsParseException()
         {
@@ -160,7 +161,7 @@ namespace Parser.Tests
             Assert.IsType<ParseException>(exception.InnerException);
             Assert.Contains("missing expression", exception.InnerException.Message, StringComparison.OrdinalIgnoreCase);
         }
-        
+
         [Fact]
         public void ParseReturnStatement_MissingOpeningParenthesis_ThrowsParseException()
         {
@@ -174,7 +175,7 @@ namespace Parser.Tests
             var exception = Assert.Throws<TargetInvocationException>(() => InvokeParseReturnStatement(tokens));
             Assert.IsType<ParseException>(exception.InnerException);
         }
-        
+
         [Fact]
         public void ParseReturnStatement_MissingClosingParenthesis_ThrowsParseException()
         {
@@ -188,11 +189,11 @@ namespace Parser.Tests
             var exception = Assert.Throws<TargetInvocationException>(() => InvokeParseReturnStatement(tokens));
             Assert.IsType<ParseException>(exception.InnerException);
         }
-        
+
         #endregion
-        
+
         #region AssignmentStatement Tests
-        
+
         [Fact]
         public void ParseAssignmentStmt_SimpleIntegerLiteral_ReturnsCorrectNode()
         {
@@ -210,20 +211,20 @@ namespace Parser.Tests
             Assert.NotNull(result);
             Assert.NotNull(result.Variable);
             Assert.NotNull(result.Expression);
-            
+
             Assert.IsType<VariableNode>(result.Variable);
             Assert.IsType<LiteralNode>(result.Expression);
-            
+
             var variableNode = (VariableNode)result.Variable;
             var literalNode = (LiteralNode)result.Expression;
-            
+
             Assert.Equal("x", variableNode.Name);
             Assert.Equal(42, literalNode.Value);
-            
+
             // Verify that variable was added to symbol table
             Assert.True(symbolTable.ContainsKey("x"));
         }
-        
+
         [Fact]
         public void ParseAssignmentStmt_SimpleVariableExpression_ReturnsCorrectNode()
         {
@@ -241,20 +242,20 @@ namespace Parser.Tests
             Assert.NotNull(result);
             Assert.NotNull(result.Variable);
             Assert.NotNull(result.Expression);
-            
+
             Assert.IsType<VariableNode>(result.Variable);
             Assert.IsType<VariableNode>(result.Expression);
-            
+
             var variableNode = (VariableNode)result.Variable;
             var expressionNode = (VariableNode)result.Expression;
-            
+
             Assert.Equal("result", variableNode.Name);
             Assert.Equal("value", expressionNode.Name);
-            
+
             // Verify that variable was added to symbol table
             Assert.True(symbolTable.ContainsKey("result"));
         }
-        
+
         [Fact]
         public void ParseAssignmentStmt_BinaryOperation_ReturnsCorrectNode()
         {
@@ -272,28 +273,28 @@ namespace Parser.Tests
             Assert.NotNull(result);
             Assert.NotNull(result.Variable);
             Assert.NotNull(result.Expression);
-            
+
             Assert.IsType<VariableNode>(result.Variable);
             Assert.IsType<PlusNode>(result.Expression);
-            
+
             var variableNode = (VariableNode)result.Variable;
             Assert.Equal("result", variableNode.Name);
-            
+
             // Verify that variable was added to symbol table
             Assert.True(symbolTable.ContainsKey("result"));
         }
-        
+
         [Fact]
         public void ParseAssignmentStmt_NestedExpression_ReturnsCorrectNode()
         {
             // Arrange - Note: Nested operations format: (a + (b * c))
             var tokens = CreateTokens(
                 new[] { "result", ":=", "(", "a", "+", "(", "b", "*", "c", ")", ")" },
-                new[] { 
-                    TokenType.VARIABLE, TokenType.ASSIGNMENT, 
-                    TokenType.LEFT_PAREN, TokenType.VARIABLE, TokenType.OPERATOR, 
+                new[] {
+                    TokenType.VARIABLE, TokenType.ASSIGNMENT,
+                    TokenType.LEFT_PAREN, TokenType.VARIABLE, TokenType.OPERATOR,
                     TokenType.LEFT_PAREN, TokenType.VARIABLE, TokenType.OPERATOR, TokenType.VARIABLE, TokenType.RIGHT_PAREN,
-                    TokenType.RIGHT_PAREN 
+                    TokenType.RIGHT_PAREN
                 }
             );
             var symbolTable = new SymbolTable<string, object>();
@@ -305,11 +306,11 @@ namespace Parser.Tests
             Assert.NotNull(result);
             Assert.IsType<VariableNode>(result.Variable);
             Assert.IsType<PlusNode>(result.Expression);
-            
+
             // Verify that variable was added to symbol table
             Assert.True(symbolTable.ContainsKey("result"));
         }
-        
+
         [Fact]
         public void ParseAssignmentStmt_InvalidVariableName_ThrowsParseException()
         {
@@ -325,7 +326,7 @@ namespace Parser.Tests
             Assert.IsType<ParseException>(exception.InnerException);
             Assert.Contains("Invalid variable name", exception.InnerException.Message, StringComparison.OrdinalIgnoreCase);
         }
-        
+
         [Fact]
         public void ParseAssignmentStmt_MissingAssignmentOperator_ThrowsParseException()
         {
@@ -341,7 +342,7 @@ namespace Parser.Tests
             Assert.IsType<ParseException>(exception.InnerException);
             Assert.Contains("Expected assignment operator", exception.InnerException.Message, StringComparison.OrdinalIgnoreCase);
         }
-        
+
         [Fact]
         public void ParseAssignmentStmt_MissingOpeningParenthesis_ThrowsParseException()
         {
@@ -356,7 +357,7 @@ namespace Parser.Tests
             var exception = Assert.Throws<TargetInvocationException>(() => InvokeParseAssignmentStmt(tokens, symbolTable));
             Assert.IsType<ParseException>(exception.InnerException);
         }
-        
+
         [Fact]
         public void ParseAssignmentStmt_MissingClosingParenthesis_ThrowsParseException()
         {
@@ -371,7 +372,7 @@ namespace Parser.Tests
             var exception = Assert.Throws<TargetInvocationException>(() => InvokeParseAssignmentStmt(tokens, symbolTable));
             Assert.IsType<ParseException>(exception.InnerException);
         }
-        
+
         [Fact]
         public void ParseAssignmentStmt_MissingExpression_ThrowsParseException()
         {
@@ -386,7 +387,7 @@ namespace Parser.Tests
             var exception = Assert.Throws<TargetInvocationException>(() => InvokeParseAssignmentStmt(tokens, symbolTable));
             Assert.IsType<ParseException>(exception.InnerException);
         }
-        
+
         [Fact]
         public void ParseAssignmentStmt_SymbolTableScoping_WorksCorrectly()
         {
@@ -395,7 +396,8 @@ namespace Parser.Tests
                 new[] { "x", ":=", "(", "42", ")" },
                 new[] { TokenType.VARIABLE, TokenType.ASSIGNMENT, TokenType.LEFT_PAREN, TokenType.INTEGER, TokenType.RIGHT_PAREN }
             );
-            
+
+
             // Create nested symbol tables to test scoping
             var parentSymbolTable = new SymbolTable<string, object>();
             var childSymbolTable = new SymbolTable<string, object>(parentSymbolTable);
@@ -406,28 +408,28 @@ namespace Parser.Tests
             // Assert
             // Variable should be in child symbol table
             Assert.True(childSymbolTable.ContainsKeyLocal("x"));
-            
+
             // Variable should be accessible through the child table but not directly in parent
             Assert.True(childSymbolTable.ContainsKey("x"));
             Assert.False(parentSymbolTable.ContainsKey("x"));
-            
+
             // Verify correct variable lookup via TryGetValue
             Assert.True(childSymbolTable.TryGetValue("x", out var value));
             Assert.Equal(null, value); // Value is null during parse time
         }
-        
+
         [Fact]
         public void ParseAssignmentStmt_NestedScopes_VariablesFoundCorrectly()
         {
             // Arrange
             var globalScope = new SymbolTable<string, object>();
             globalScope["global"] = "global_value";
-            
+
             var functionScope = new SymbolTable<string, object>(globalScope);
             functionScope["function"] = "function_value";
-            
+
             var blockScope = new SymbolTable<string, object>(functionScope);
-            
+
             var tokensUsingGlobalVar = CreateTokens(
                 new[] { "result", ":=", "(", "global", "+", "5", ")" },
                 new[] { TokenType.VARIABLE, TokenType.ASSIGNMENT, TokenType.LEFT_PAREN, TokenType.VARIABLE, TokenType.OPERATOR, TokenType.INTEGER, TokenType.RIGHT_PAREN }
@@ -439,25 +441,25 @@ namespace Parser.Tests
             // Assert
             Assert.NotNull(result);
             Assert.True(blockScope.ContainsKey("result"));
-            
+
             // Verify we can look up variables from any parent scope
             Assert.True(blockScope.TryGetValue("global", out _));
             Assert.True(blockScope.TryGetValue("function", out _));
-            
+
             // But local lookups won't find parent variables
             Assert.False(blockScope.TryGetValueLocal("global", out _));
             Assert.False(blockScope.TryGetValueLocal("function", out _));
         }
-        
+
         [Fact]
         public void ParseAssignmentStmt_VariableShadowing_AccessesCorrectVariable()
         {
             // Arrange
             var parentScope = new SymbolTable<string, object>();
             parentScope["x"] = "parent_value";
-            
+
             var childScope = new SymbolTable<string, object>(parentScope);
-            
+
             // Tokens for assignment using shadowed variable
             var tokens = CreateTokens(
                 new[] { "x", ":=", "(", "42", ")" },
@@ -469,32 +471,32 @@ namespace Parser.Tests
 
             // Assert
             Assert.NotNull(result);
-            
+
             // 'x' should now exist in both scopes
             Assert.True(parentScope.ContainsKey("x"));
             Assert.True(childScope.ContainsKey("x"));
-            
+
             // But childScope's local lookup should find it too now
             Assert.True(childScope.ContainsKeyLocal("x"));
-            
+
             // Parent value should be unchanged
             Assert.Equal("parent_value", parentScope["x"]);
-            
+
             // Child value is still null at parse time
             Assert.Null(childScope["x"]);
         }
-        
+
         [Fact]
         public void ParseAssignmentStmt_ComplexExpression_AllOperators_WorksCorrectly()
         {
             // Test all supported operators
             var operators = new[] { "+", "-", "*", "/", "//", "%", "**" };
-            var operatorTypes = new[] { 
-                typeof(PlusNode), typeof(MinusNode), typeof(TimesNode), 
-                typeof(FloatDivNode), typeof(IntDivNode), typeof(ModulusNode), 
+            var operatorTypes = new[] {
+                typeof(PlusNode), typeof(MinusNode), typeof(TimesNode),
+                typeof(FloatDivNode), typeof(IntDivNode), typeof(ModulusNode),
                 typeof(ExponentiationNode)
             };
-            
+
             for (int i = 0; i < operators.Length; i++)
             {
                 // Arrange
@@ -513,7 +515,7 @@ namespace Parser.Tests
                 Assert.IsType(operatorTypes[i], result.Expression);
             }
         }
-        
+
         #endregion
     }
 }

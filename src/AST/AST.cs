@@ -13,6 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using Utilities;
+using Containers;
+
 
 namespace AST
 {
@@ -48,6 +50,7 @@ namespace AST
         /// The contained statements in this block. Preserved in insertion order.
         /// </summary>
         public List<Statement> Statements { get; }
+        public Containers.SymbolTable<string, object> SymbolTable { get; }
 
         /// <summary>
         /// Create a new block statement containing the given list of statements.
@@ -55,7 +58,13 @@ namespace AST
         /// <param name="statements">List of contained statements (may be empty)</param>
         public BlockStmt(List<Statement> statements)
         {
+            SymbolTable = new Containers.SymbolTable<string, object>();
             Statements = statements;
+        }
+
+        public void AddStatement(Statement stmt)
+        {
+            Statements.Add(stmt);
         }
 
         /// <summary>

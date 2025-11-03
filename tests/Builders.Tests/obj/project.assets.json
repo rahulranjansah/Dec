@@ -416,6 +416,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
+          "Containers": "1.0.0",
           "Utilities": "1.0.0"
         },
         "compile": {
@@ -436,6 +437,16 @@
         },
         "runtime": {
           "bin/placeholder/Builders.dll": {}
+        }
+      },
+      "Containers/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/Containers.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Containers.dll": {}
         }
       },
       "Utilities/1.0.0": {
@@ -978,6 +989,11 @@
       "type": "project",
       "path": "../../src/Builders/Builders.csproj",
       "msbuildProject": "../../src/Builders/Builders.csproj"
+    },
+    "Containers/1.0.0": {
+      "type": "project",
+      "path": "../../src/Containers/Containers.csproj",
+      "msbuildProject": "../../src/Containers/Containers.csproj"
     },
     "Utilities/1.0.0": {
       "type": "project",
