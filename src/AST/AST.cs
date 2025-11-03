@@ -61,6 +61,11 @@ namespace AST
             SymbolTable = new Containers.SymbolTable<string, object>();
             Statements = statements;
         }
+        public BlockStmt(Containers.SymbolTable<string, object> symbolTable)
+        {
+            SymbolTable = symbolTable;
+            Statements = new List<Statement>();
+        }
 
         public void AddStatement(Statement stmt)
         {

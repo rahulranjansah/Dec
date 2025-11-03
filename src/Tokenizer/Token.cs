@@ -41,8 +41,8 @@ namespace Tokenizer
         public const string PLUS = "+";
         public const string MINUS = "-";
         public const string TIMES = "*";
-        public const string FLOAT_DIV = "//";  // Floating-point division
-        public const string INT_DIV = "/";     // Integer division
+        public const string INT_DIV = "//";  // Floating-point division
+        public const string FLOAT_DIV = "/";     // Integer division
         public const string MOD = "%";         // Modulus operator
         public const string EXP = "**";        // Exponentiation operator
 

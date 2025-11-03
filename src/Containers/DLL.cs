@@ -55,16 +55,18 @@ namespace Containers
 
         private DNode GetNode(int index)
         {
-            if (index < 0 || this.head.next == this.tail) throw new IndexOutOfRangeException(nameof(index));
-            DNode CurrentNode = this.head.next;
-            while (index >= 1)
+            if (index < 0 || index >= size)
+                throw new IndexOutOfRangeException(nameof(index));
+
+            DNode current = this.head.next;
+            for (int i = 0; i < index; i++)
             {
-                CurrentNode = CurrentNode.next;
-                if (CurrentNode.next == null) throw new IndexOutOfRangeException(nameof(index));
-                index--;
+                current = current.next;
             }
-            return CurrentNode;
+
+            return current;
         }
+
         public bool Contains(T item)
         {
             DNode CurrentNode = this.head.next;
@@ -185,20 +187,19 @@ namespace Containers
 
         public int IndexOf(T item)
         {
-            int Count = 0;
-            DNode CurrentNode = this.head.next;
-            while (CurrentNode.next != null)
+            int index = 0;
+            DNode current = this.head.next;
+            while (current != this.tail)
             {
-                if (EqualityComparer<T>.Default.Equals(CurrentNode.value, item)) return Count;
-                else
-                {
-                    CurrentNode = CurrentNode.next;
-                    Count++;
-                }
-
+                if (EqualityComparer<T>.Default.Equals(current.value, item))
+                    return index;
+                current = current.next;
+                index++;
             }
             return -1;
         }
+
+
 
         public T this[int index]
         {

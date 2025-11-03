@@ -209,26 +209,44 @@ namespace Containers
     /// Indexer with hierarchical lookup for get, local-only for set
     /// </summary>
     public TValue this[TKey key]
-    {
-        get
         {
-            TValue value;
-            // Uses hierarchical TryGetValue for lookup
-            if (((IDictionary<TKey, TValue>)this).TryGetValue(key, out value))
+            get
             {
-                return value;
+                TValue value;
+                // Uses hierarchical TryGetValue for lookup
+                if (((IDictionary<TKey, TValue>)this).TryGetValue(key, out value))
+                {
+                    return value;
+                }
+                throw new KeyNotFoundException($"Key '{key}' not found");
             }
-            throw new KeyNotFoundException($"Key '{key}' not found");
+
+            // set
+            // {
+            //     // Set operation only works on local scope
+            //     int index = this._keys.IndexOf(key);
+            //         if (index == -1) { throw new KeyNotFoundException($"Key '{key}' not found"); }
+
+
+            //     this._values[index] = value;
+
+            // }
+            set
+            {
+                int index = this._keys.IndexOf(key);
+                if (index == -1)
+                {
+                    this._keys.Add(key);
+                    this._values.Add(value);
+                }
+                else
+                {
+                    this._values[index] = value;
+                }
+            }
+
         }
 
-        set
-        {
-            // Set operation only works on local scope
-            int index = this._keys.IndexOf(key);
-            if (index == -1) throw new KeyNotFoundException($"Key '{key}' not found");
-            this._values[index] = value;
-        }
-    }
 
     /// <summary>
     /// Local-only key search (does not check parent scopes)
@@ -239,20 +257,21 @@ namespace Containers
         return this._keys.IndexOf(key) != -1;
     }
 
-    /// <summary>
-    /// Local-only value lookup (does not check parent scopes)
-    /// </summary>
-    public bool TryGetValueLocal(TKey key, out TValue value)
-    {
-        int index = this._keys.IndexOf(key);
-        if (index != -1)
+        /// <summary>
+        /// Local-only value lookup (does not check parent scopes)
+        /// </summary>
+        public bool TryGetValueLocal(TKey key, out TValue value)
         {
-            // Key found at this index in both parallel structures
-            value = this._values[index];
-            return true;
+            int index = this._keys.IndexOf(key);
+            if (index != -1)
+            {
+                // Key found at this index in both parallel structures
+                value = this._values[index];
+                return true;
+            }
+            value = default(TValue);
+            return false;
         }
-        value = default(TValue);
-        return false;
-    }
+
 }
 }

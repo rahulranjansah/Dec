@@ -88,7 +88,7 @@ public class TokenizerImpl
         }
         else return new Token(item, TokenType.VARIABLE);
 
-        throw new ArgumentException("Unexpected input");
+        throw new ArgumentException("Invalid character");
     }
 
     /// <summary>
@@ -128,7 +128,7 @@ public class TokenizerImpl
 
         return new Token(item, TokenType.INTEGER);
 
-        throw new ArgumentException("Unexpected String");
+        throw new ArgumentException("Invalid character");
     }
 
     /// <summary>
@@ -154,7 +154,7 @@ public class TokenizerImpl
             index + 1 < input.Length && input[index + 1] == '/')
         {
             index += 2;
-            return new Token(TokenConstants.FLOAT_DIV, TokenType.OPERATOR);
+            return new Token(TokenConstants.INT_DIV, TokenType.OPERATOR);
         }
 
         // Handle ":=" (assignment)
@@ -172,14 +172,14 @@ public class TokenizerImpl
                 TokenConstants.MINUS,
                 TokenConstants.TIMES,
                 TokenConstants.MOD,
-                TokenConstants.INT_DIV
+                TokenConstants.FLOAT_DIV
             }.Contains(element))
         {
             index++;
             return new Token(element, TokenType.OPERATOR);
         }
 
-        throw new ArgumentException("Unexpected String");
+        throw new ArgumentException("Invalid character");
     }
 
     /// <summary>
@@ -194,7 +194,7 @@ public class TokenizerImpl
         else if (letter == TokenConstants.RIGHT_CURLY) { return new Token(letter, TokenType.RIGHT_CURLY); }
         else if (letter == TokenConstants.LEFT_PAREN) { return new Token(letter, TokenType.LEFT_PAREN); }
         else if (letter == TokenConstants.RIGHT_PAREN) { return new Token(letter, TokenType.RIGHT_PAREN); }
-        else { throw new ArgumentException("Unexpected String"); }
+        else { throw new ArgumentException("Invalid character"); }
     }
 
     #endregion

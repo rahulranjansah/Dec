@@ -84,8 +84,8 @@ namespace Parser
 
         private static AST.ExpressionNode HandleSingleToken(Tokenizer.Token token)
         {
-            if (token._tkntype == TokenType.INTEGER) { return new LiteralNode(token._value); }
-            if (token._tkntype == TokenType.FLOAT) { return new LiteralNode(token._value); }
+            if (token._tkntype == TokenType.INTEGER) { return new LiteralNode(int.Parse(token._value)); }
+            if (token._tkntype == TokenType.FLOAT) { return new LiteralNode(double.Parse(token._value)); }
             if (token._tkntype == TokenType.VARIABLE) { return new VariableNode(token._value); }
             throw new ParseException("Unexpected token may not not float or integer or variable");
         }
@@ -112,6 +112,10 @@ namespace Parser
         // Individual Statements
         private static AST.AssignmentStmt ParseAssignmentStmt(List<Tokenizer.Token> content, SymbolTable<string, object> keyval)
         {
+            if (content[0]._tkntype != TokenType.VARIABLE) { throw new ParseException("Invalid variable name"); }
+            if (content[1]._tkntype != TokenType.ASSIGNMENT){ throw new ParseException("Expected assignment operator ':=' after variable name"); }
+
+
             if (content.Count < 3) throw new ParseException("Assignement statement al least need three tokens");
 
             // check if the first token is a variable
@@ -126,13 +130,13 @@ namespace Parser
 
         private static AST.ReturnStmt ParseReturnStatement(List<Tokenizer.Token> content)
         {
-            if (content.Count < 2) { throw new ParseException("Return statement must have at least two tokens"); }
+            if (content.Count < 2) { throw new ParseException("Missing expression after 'return'"); }
 
             if (content[0]._tkntype == TokenType.RETURN)
             {
                 return new AST.ReturnStmt(ParseExpression(content.GetRange(1, content.Count - 1)));
             }
-            throw new ParseException("Return statement must start with return keyword");
+            throw new ParseException("Missing expression after 'return'");
         }
 
         private static AST.Statement ParseStatement(List<Tokenizer.Token> content, SymbolTable<string, object> keyval)
@@ -149,7 +153,9 @@ namespace Parser
         // }
         private static void ParseStmtList(List<string> lines, BlockStmt stmt)
         {
-            SymbolTable<string, object> Data = new SymbolTable<string, object>();
+            // SymbolTable<string, object> Data = new SymbolTable<string, object>();
+            SymbolTable<string, object> Data = stmt.SymbolTable;
+
 
             //line by line
             var tknzier = new TokenizerImpl();
@@ -184,7 +190,8 @@ namespace Parser
                         }
                         lineBeingEaten++;
                     }
-                    i = lineBeingEaten;
+                    // remove the innermost stuff
+                    lines.RemoveRange(i, lineBeingEaten - i);
 
                 }
                 else if (content[0]._tkntype == TokenType.RIGHT_CURLY)
@@ -193,11 +200,14 @@ namespace Parser
                 }
                 else
                 {
+                    // no recusion here so remove the curly brace manually
                     var onelinerStmt = ParseStatement(content, Data);
                     stmt.Statements.Add(onelinerStmt);
-                    i++;
+                    lines.RemoveAt(i);
                 }
             }
+
+            throw new ParseException("Missing closing '}' in block.");
         }
 
         // public static AST.BlockStmt ParseBlockStmt(List<string> lines, SymbolTable<string, object> keyval)
@@ -241,10 +251,9 @@ namespace Parser
                 throw new ParseException("Block must start with '{' and end with '}'");
             }
 
-            // Create the BlockStmt first
-            AST.BlockStmt block = new BlockStmt([]);
-
             SymbolTable<string, object> blockscope = new SymbolTable<string, object>(keyval);
+
+            AST.BlockStmt block = new BlockStmt(blockscope);
 
             // Parse the statements directly into the block
             ParseStmtList(lines.GetRange(1, lines.Count - 1), block);

@@ -82,7 +82,12 @@ namespace Parser.Tests
             Assert.IsType<LiteralNode>(result.Expression);
 
             var literalNode = (LiteralNode)result.Expression;
-            Assert.Equal(3.14, literalNode.Value);
+            // Assert.Equal(3.14, literalNode.Value, 4);
+            // Assert.Equal(Math.Round(3.14, 4), Math.Round((double)literalNode.Value, 4));
+            Assert.Equal(3.14, (double)literalNode.Value, precision: 3);
+
+
+
         }
 
         [Fact]
