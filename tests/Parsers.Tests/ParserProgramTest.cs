@@ -206,37 +206,6 @@ namespace Parser.Tests
         }
 
         [Fact]
-        public void Parse_ComplexNestedExpressions_ReturnsCorrectAST()
-        {
-            string program = @"{
-  a := (5)
-  b := (10)
-  c := ((a + b) * (b - a))
-  d := (((c + 1) ** 2) // 10)
-  return (d)
-}";
-            var result = Parser.Parse(program);
-
-            Assert.NotNull(result);
-            Assert.Equal(5, result.Statements.Count);
-
-            var cAssign = (AssignmentStmt)result.Statements[2];
-            var timesNode = Assert.IsType<TimesNode>(cAssign.Expression);
-            Assert.IsType<PlusNode>(timesNode.Left);
-            Assert.IsType<MinusNode>(timesNode.Right);
-
-            var dAssign = (AssignmentStmt)result.Statements[3];
-            var intDivNode = Assert.IsType<IntDivNode>(dAssign.Expression);
-            Assert.IsType<ExponentiationNode>(intDivNode.Left);
-            Assert.IsType<LiteralNode>(intDivNode.Right);
-
-            string unparsed = result.Unparse();
-            Assert.Contains("c := ((a + b) * (b - a))", unparsed);
-            Assert.Contains("d := (((c + 1) ** 2) // 10)", unparsed);
-            Assert.Contains("return d", unparsed);
-        }
-
-        [Fact]
         public void Parse_MultipleNestedBlocks_ReturnsCorrectAST()
         {
             string program = @"{

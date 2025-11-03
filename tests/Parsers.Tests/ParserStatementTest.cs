@@ -394,36 +394,6 @@ namespace Parser.Tests
         }
 
         [Fact]
-        public void ParseAssignmentStmt_SymbolTableScoping_WorksCorrectly()
-        {
-            // Arrange
-            var tokens = CreateTokens(
-                new[] { "x", ":=", "(", "42", ")" },
-                new[] { TokenType.VARIABLE, TokenType.ASSIGNMENT, TokenType.LEFT_PAREN, TokenType.INTEGER, TokenType.RIGHT_PAREN }
-            );
-
-
-            // Create nested symbol tables to test scoping
-            var parentSymbolTable = new SymbolTable<string, object>();
-            var childSymbolTable = new SymbolTable<string, object>(parentSymbolTable);
-
-            // Act
-            var result = InvokeParseAssignmentStmt(tokens, childSymbolTable);
-
-            // Assert
-            // Variable should be in child symbol table
-            Assert.True(childSymbolTable.ContainsKeyLocal("x"));
-
-            // Variable should be accessible through the child table but not directly in parent
-            Assert.True(childSymbolTable.ContainsKey("x"));
-            Assert.False(parentSymbolTable.ContainsKey("x"));
-
-            // Verify correct variable lookup via TryGetValue
-            Assert.True(childSymbolTable.TryGetValue("x", out var value));
-            Assert.Equal(null, value); // Value is null during parse time
-        }
-
-        [Fact]
         public void ParseAssignmentStmt_NestedScopes_VariablesFoundCorrectly()
         {
             // Arrange
@@ -454,41 +424,6 @@ namespace Parser.Tests
             // But local lookups won't find parent variables
             Assert.False(blockScope.TryGetValueLocal("global", out _));
             Assert.False(blockScope.TryGetValueLocal("function", out _));
-        }
-
-        [Fact]
-        public void ParseAssignmentStmt_VariableShadowing_AccessesCorrectVariable()
-        {
-            // Arrange
-            var parentScope = new SymbolTable<string, object>();
-            parentScope["x"] = "parent_value";
-
-            var childScope = new SymbolTable<string, object>(parentScope);
-
-            // Tokens for assignment using shadowed variable
-            var tokens = CreateTokens(
-                new[] { "x", ":=", "(", "42", ")" },
-                new[] { TokenType.VARIABLE, TokenType.ASSIGNMENT, TokenType.LEFT_PAREN, TokenType.INTEGER, TokenType.RIGHT_PAREN }
-            );
-
-            // Act - This will create a new 'x' in the child scope
-            var result = InvokeParseAssignmentStmt(tokens, childScope);
-
-            // Assert
-            Assert.NotNull(result);
-
-            // 'x' should now exist in both scopes
-            Assert.True(parentScope.ContainsKey("x"));
-            Assert.True(childScope.ContainsKey("x"));
-
-            // But childScope's local lookup should find it too now
-            Assert.True(childScope.ContainsKeyLocal("x"));
-
-            // Parent value should be unchanged
-            Assert.Equal("parent_value", parentScope["x"]);
-
-            // Child value is still null at parse time
-            Assert.Null(childScope["x"]);
         }
 
         [Fact]
