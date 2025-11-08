@@ -18,6 +18,25 @@ using Containers;
 
 namespace AST
 {
+    public interface IVisitor<TParam, TResult>
+    {
+        // Expression nodes
+        TResult Visit(PlusNode node, TParam param);
+        TResult Visit(MinusNode node, TParam param);
+        TResult Visit(TimesNode node, TParam param);
+        TResult Visit(FloatDivNode node, TParam param);
+        TResult Visit(IntDivNode node, TParam param);
+        TResult Visit(ModulusNode node, TParam param);
+        TResult Visit(ExponentiationNode node, TParam param);
+        TResult Visit(LiteralNode node, TParam param);
+        TResult Visit(VariableNode node, TParam param);
+
+        // Statement nodes
+        TResult Visit(AssignmentStmt node, TParam param);
+        TResult Visit(ReturnStmt node, TParam param);
+        TResult Visit(BlockStmt node, TParam param);
+    }
+
     #region Statements
 
     /// <summary>
@@ -190,6 +209,8 @@ namespace AST
         /// <param name="level">Indentation level (optional helper for nested formatting)</param>
         /// <returns>Unparsed expression text</returns>
         public abstract string Unparse(int level = 0);
+
+        public abstract TResult Accept<TParam, TResult>(IVisitor<TParam, TResult> visitor, TParam param);
     }
 
     /// <summary>
@@ -223,6 +244,11 @@ namespace AST
         {
             return Value.ToString();
         }
+
+        public override TResult Accept<TParam, TResult>(IVisitor<TParam, TResult> visitor, TParam param)
+        {
+            return visitor.Visit(this, param);
+        }
     }
 
     /// <summary>
@@ -252,6 +278,11 @@ namespace AST
         public override string Unparse(int level = 0)
         {
             return Name;
+        }
+
+        public override TResult Accept<TParam, TResult>(IVisitor<TParam, TResult> visitor, TParam param)
+        {
+            return visitor.Visit(this, param);
         }
     }
 
@@ -314,6 +345,10 @@ namespace AST
         {
             return $"({Left.Unparse(level)} + {Right.Unparse(level)})";
         }
+        public override TResult Accept<TParam, TResult>(IVisitor<TParam, TResult> visitor, TParam param)
+        {
+            return visitor.Visit(this, param);
+        }
     }
 
     /// <summary>
@@ -331,6 +366,10 @@ namespace AST
         {
             return $"({Left.Unparse(level)} - {Right.Unparse(level)})";
         }
+        public override TResult Accept<TParam, TResult>(IVisitor<TParam, TResult> visitor, TParam param)
+        {
+            return visitor.Visit(this, param);
+        }
     }
 
     /// <summary>
@@ -347,6 +386,10 @@ namespace AST
         public override string Unparse(int level = 0)
         {
             return $"({Left.Unparse(level)} * {Right.Unparse(level)})";
+        }
+        public override TResult Accept<TParam, TResult>(IVisitor<TParam, TResult> visitor, TParam param)
+        {
+            return visitor.Visit(this, param);
         }
     }
 
@@ -383,6 +426,10 @@ namespace AST
         {
             return $"({Left.Unparse(level)} // {Right.Unparse(level)})";
         }
+        public override TResult Accept<TParam, TResult>(IVisitor<TParam, TResult> visitor, TParam param)
+        {
+            return visitor.Visit(this, param);
+        }
     }
 
     /// <summary>
@@ -399,6 +446,11 @@ namespace AST
         public override string Unparse(int level = 0)
         {
             return $"({Left.Unparse(level)} % {Right.Unparse(level)})";
+        }
+
+        public override TResult Accept<TParam, TResult>(IVisitor<TParam, TResult> visitor, TParam param)
+        {
+            return visitor.Visit(this, param);
         }
     }
 
@@ -417,7 +469,107 @@ namespace AST
         {
             return $"({Left.Unparse(level)} ** {Right.Unparse(level)})";
         }
+
+        public override TResult Accept<TParam, TResult>(IVisitor<TParam, TResult> visitor, TParam param)
+        {
+            return visitor.Visit(this, param);
+        }
     }
 
     #endregion
+
+
+    public class UnparseVisitor : IVisitor<int, string>
+    {
+        /// <summary>
+        /// Unparses the given AST node with the specified indentation level
+        /// </summary>
+        /// <param name="node">The AST node to unparse</param>
+        /// <param name="level">The indentation level</param>
+        /// <returns>String representation of the node</returns>
+        public string Unparse(ExpressionNode node, int level = 0)
+        {
+            return node.Accept(this, level);
+        }
+
+        /// <summary>
+        /// Unparses the given statement with the specified indentation level
+        /// </summary>
+        /// <param name="stmt">The statement to unparse</param>
+        /// <param name="level">The indentation level</param>
+        /// <returns>String representation of the statement</returns>
+        public string Unparse(Statement stmt, int level = 0)
+        {
+            return stmt.Accept(this, level);
+        }
+
+        #region Expression Node Visit Methods
+
+        public string Visit(PlusNode node, int level)
+        {
+            string left = node.Left.Accept(this, level);
+            string right = node.Right.Accept(this, level);
+            return $"({left} + {right})";
+        }
+
+        public string Visit(MinusNode node, int level)
+        {
+            string left = node.Left.Accept(this, level);
+            string right = node.Right.Accept(this, level);
+            return $"({left} - {right})";
+        }
+
+        public string Visit(TimesNode node, int level)
+        {
+            string left = node.Left.Accept(this, level);
+            string right = node.Right.Accept(this, level);
+            return $"({left} * {right})";
+        }
+
+        public string Visit(FloatDivNode node, int level)
+        {
+            string left = node.Left.Accept(this, level);
+            string right = node.Right.Accept(this, level);
+            return $"({left} / {right})";
+        }
+
+        public string Visit(IntDivNode node, int level)
+        {
+            string left = node.Left.Accept(this, level);
+            string right = node.Right.Accept(this, level);
+            return $"({left} // {right})";
+        }
+
+        public string Visit(ModulusNode node, int level)
+        {
+            string left = node.Left.Accept(this, level);
+            string right = node.Right.Accept(this, level);
+            return $"({left} % {right})";
+        }
+
+        public string Visit(ExponentiationNode node, int level)
+        {
+            string left = node.Left.Accept(this, level);
+            string right = node.Right.Accept(this, level);
+            return $"({left} ** {right})";
+        }
+
+        public string Visit(LiteralNode node, int level)
+        {
+            return $"{node}";
+        }
+
+
+        #endregion
+
+
+
+        #region Statement Node Visit Methods
+
+        // TODO
+
+        #endregion
+    }
 }
+
+

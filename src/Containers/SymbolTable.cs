@@ -221,16 +221,6 @@ namespace Containers
                 throw new KeyNotFoundException($"Key '{key}' not found");
             }
 
-            // set
-            // {
-            //     // Set operation only works on local scope
-            //     int index = this._keys.IndexOf(key);
-            //         if (index == -1) { throw new KeyNotFoundException($"Key '{key}' not found"); }
-
-
-            //     this._values[index] = value;
-
-            // }
             set
             {
                 int index = this._keys.IndexOf(key);

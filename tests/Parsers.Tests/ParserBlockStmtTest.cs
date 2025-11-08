@@ -98,21 +98,6 @@ namespace Parser.Tests
                 exception.InnerException.Message, StringComparison.OrdinalIgnoreCase);
         }
 
-        // [Fact]
-        // public void ParseBlockStmt_ConsumesAllLinesOnSuccess()
-        // {
-        //     // Arrange
-        //     var lines = new List<string> { "{", "x := (42)", "}" };
-        //     var symbolTable = new SymbolTable<string, object>();
-
-        //     // Act
-        //     var result = InvokeParseBlockStmt(lines, symbolTable);
-
-        //     // Assert
-        //     Assert.NotNull(result);
-        //     Assert.Single(result.Statements);
-        // }
-
         [Fact]
         public void ParseBlockStmt_ConsumesAllLinesOnSuccess()
         {
