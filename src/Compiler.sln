@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Containers", "Containers\Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visitors", "Visitors\Visitors.csproj", "{F3FB2E27-4B15-48B3-A5E2-95E38DDF7B00}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visitors.Tests", "..\tests\Visitors.Tests\Visitors.Tests.csproj", "{EFAE83BD-B697-49BC-8CAE-45A78C8CFFBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,10 @@ Global
 		{F3FB2E27-4B15-48B3-A5E2-95E38DDF7B00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3FB2E27-4B15-48B3-A5E2-95E38DDF7B00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3FB2E27-4B15-48B3-A5E2-95E38DDF7B00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFAE83BD-B697-49BC-8CAE-45A78C8CFFBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFAE83BD-B697-49BC-8CAE-45A78C8CFFBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFAE83BD-B697-49BC-8CAE-45A78C8CFFBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFAE83BD-B697-49BC-8CAE-45A78C8CFFBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CA99E407-5663-4E21-ADA6-80B04E3F4F36} = {0649A0A8-FFE6-4AE2-8D47-CA2131457EB7}
