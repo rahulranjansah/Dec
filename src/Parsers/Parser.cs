@@ -65,8 +65,12 @@ namespace Parser
             }
 
             // Require at least '{' and '}' for a valid block
-            if (lines.Count < 2) { throw new ParseException("Program must have atleas opening '{' and closing '}'."); }
+            // if (lines.Count < 2) { throw new ParseException("Program must have atleas opening '{' and closing '}'."); }
 
+            if (!Program.Contains("{") || !Program.Contains("}"))
+            {
+                throw new ParseException("Program must have at least opening '{' and closing '}'.");
+            }
             return ParseBlockStmt(lines, blockScope);
         }
 
@@ -125,13 +129,17 @@ namespace Parser
                 }
 
                 // Operator found — split left/right recursively
-                if (content[i]._tkntype == TokenType.OPERATOR)
+                if (i < content.Count && content[i]._tkntype == TokenType.OPERATOR)
                 {
-                    return CreateBinaryOperatorNode(
-                        content[i]._value,
-                        ParseExpressionContent(content.GetRange(0, i)),
-                        ParseExpressionContent(content.GetRange(i + 1, content.Count - i - 1))
-                    );
+                    // Ensure we have tokens on both sides of the operator
+                    if (i > 0 && i < content.Count - 1)
+                    {
+                        return CreateBinaryOperatorNode(
+                            content[i]._value,
+                            ParseExpressionContent(content.GetRange(0, i)),
+                            ParseExpressionContent(content.GetRange(i + 1, content.Count - i - 1))
+                        );
+                    }
                 }
             }
             throw new ParseException("Not a valid expression syntax");
@@ -291,33 +299,163 @@ namespace Parser
         /// <summary>
         /// Parses a block statement delimited by '{' and '}' into a BlockStmt AST node.
         /// </summary>
-        private static AST.BlockStmt ParseBlockStmt(List<string> lines, SymbolTable<string, object> keyval)
+        // private static AST.BlockStmt ParseBlockStmt(List<string> lines, SymbolTable<string, object> keyval)
+        // {
+        //     if (lines.Count == 0) { throw new ParseException("No strings"); }
+
+        //     var tknzier = new TokenizerImpl();
+        //     List<Tokenizer.Token> content = [];
+
+        //     content.AddRange(tknzier.Tokenize(lines[0]));
+        //     content.AddRange(tknzier.Tokenize(lines[lines.Count - 1]));
+
+        //     // Validate block structure
+        //     if (content.Count != 2 ||
+        //         content[0]._tkntype != TokenType.LEFT_CURLY ||
+        //         content[1]._tkntype != TokenType.RIGHT_CURLY)
+        //     {
+        //         throw new ParseException("Block must start with '{' and end with '}'");
+        //     }
+
+        //     SymbolTable<string, object> blockscope = new SymbolTable<string, object>(keyval);
+        //     AST.BlockStmt block = new BlockStmt(blockscope);
+
+        //     // Recursively parse contained statements
+        //     ParseStmtList(lines.GetRange(1, lines.Count - 1), block);
+
+        //     return block;
+        // }
+
+        // private static AST.BlockStmt ParseBlockStmt(List<string> lines, SymbolTable<string, object> keyval)
+        // {
+        //     if (lines == null || lines.Count == 0)
+        //     {
+        //         throw new ParseException("No strings or null lines provided");
+        //     }
+
+        //     var tknzier = new TokenizerImpl();
+        //     List<Tokenizer.Token> content = new List<Tokenizer.Token>();
+
+        //     // Safely tokenize first line
+        //     var firstLine = lines[0];
+        //     if (!string.IsNullOrEmpty(firstLine))
+        //     {
+        //         var firstTokens = tknzier.Tokenize(firstLine);
+        //         if (firstTokens != null)
+        //         {
+        //             content.AddRange(firstTokens);
+        //         }
+        //     }
+
+        //     // Safely tokenize last line if different from first line
+        //     if (lines.Count > 1)
+        //     {
+        //         var lastLine = lines[lines.Count - 1];
+        //         if (!string.IsNullOrEmpty(lastLine) && lastLine != firstLine)
+        //         {
+        //             var lastTokens = tknzier.Tokenize(lastLine);
+        //             if (lastTokens != null)
+        //             {
+        //                 content.AddRange(lastTokens);
+        //             }
+        //         }
+        //     }
+
+        //     // Validate block structure - check if we have both { and } in the content
+        //     bool hasLeft = false;
+        //     bool hasRight = false;
+
+        //     foreach (var token in content)
+        //     {
+        //         if (token?._tkntype == TokenType.LEFT_CURLY)
+        //         {
+        //             hasLeft = true;
+        //         }
+        //         else if (token?._tkntype == TokenType.RIGHT_CURLY)
+        //         {
+        //             hasRight = true;
+        //         }
+        //     }
+
+        //     if (!hasLeft || !hasRight)
+        //     {
+        //         throw new ParseException("Block must start with '{' and end with '}'");
+        //     }
+
+        //     SymbolTable<string, object> blockscope = new SymbolTable<string, object>(keyval);
+        //     AST.BlockStmt block = new BlockStmt(blockscope);
+
+        //     // Only parse statements if there are lines between { and }
+        //     if (lines.Count > 2)
+        //     {
+        //         var innerLines = lines.GetRange(1, lines.Count - 2);
+        //         ParseStmtList(innerLines, block);
+        //     }
+
+        //     return block;
+private static AST.BlockStmt ParseBlockStmt(List<string> lines, SymbolTable<string, object> parent)
+{
+    var tokenizer = new TokenizerImpl();
+    var tokens = new List<Token>();
+
+    // Flatten lines → token stream
+    foreach (string line in lines)
+        tokens.AddRange(tokenizer.Tokenize(line));
+
+    if (tokens.Count == 0)
+        throw new ParseException("Empty block");
+
+    // Find opening "{"
+    int start = tokens.FindIndex(t => t._tkntype == TokenType.LEFT_CURLY);
+    if (start == -1)
+        throw new ParseException("Missing '{'");
+
+    // Find matching "}"
+    int depth = 0;
+    int end = -1;
+
+    for (int i = start; i < tokens.Count; i++)
+    {
+        if (tokens[i]._tkntype == TokenType.LEFT_CURLY)
+            depth++;
+
+        else if (tokens[i]._tkntype == TokenType.RIGHT_CURLY)
+            depth--;
+
+        if (depth == 0)
         {
-            if (lines.Count == 0) { throw new ParseException("No strings"); }
-
-            var tknzier = new TokenizerImpl();
-            List<Tokenizer.Token> content = [];
-
-            content.AddRange(tknzier.Tokenize(lines[0]));
-            content.AddRange(tknzier.Tokenize(lines[lines.Count - 1]));
-
-            // Validate block structure
-            if (content.Count != 2 ||
-                content[0]._tkntype != TokenType.LEFT_CURLY ||
-                content[1]._tkntype != TokenType.RIGHT_CURLY)
-            {
-                throw new ParseException("Block must start with '{' and end with '}'");
-            }
-
-            SymbolTable<string, object> blockscope = new SymbolTable<string, object>(keyval);
-            AST.BlockStmt block = new BlockStmt(blockscope);
-
-            // Recursively parse contained statements
-            ParseStmtList(lines.GetRange(1, lines.Count - 1), block);
-
-            return block;
+            end = i;
+            break;
         }
+    }
+
+    if (end == -1)
+        throw new ParseException("Missing '}'");
+
+    // Extract inner token slice
+    var innerTokens = tokens.GetRange(start + 1, end - start - 1);
+
+    // Convert inner tokens to lines again (simple version: join into one line)
+    List<string> innerLines = new List<string>();
+    if (innerTokens.Count > 0)
+    {
+        string line = string.Join(" ", innerTokens.Select(t => t._value));
+        innerLines.Add(line);
+    }
+
+    // Create block scope
+    var scope = new SymbolTable<string, object>(parent);
+    var block = new BlockStmt(scope);
+
+    // Use existing statement list parser
+    ParseStmtList(innerLines, block);
+
+    return block;
+
 
         #endregion
     }
+
 }
+}
+
