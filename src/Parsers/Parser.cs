@@ -69,7 +69,7 @@ namespace Parser
 
             if (!Program.Contains("{") || !Program.Contains("}"))
             {
-                throw new ParseException("Program must have at least opening '{' and closing '}'.");
+                throw new ParseException("Program must have at least opening '{' and closing '}'");
             }
             return ParseBlockStmt(lines, blockScope);
         }
@@ -85,16 +85,43 @@ namespace Parser
         /// <returns>An ExpressionNode representing the expression structure.</returns>
         private static AST.ExpressionNode ParseExpression(List<Token> expression)
         {
-            // Ensure minimum valid structure (e.g., "( 8 / 2 )")
-            if (expression.Count < 3) { throw new ParseException("Too small expression to work with"); }
+            if (expression.Count == 0) { throw new ParseException("Too small expression to work with"); }
 
             if (expression[0]._tkntype == TokenType.LEFT_CURLY && expression[expression.Count - 1]._tkntype == TokenType.RIGHT_CURLY)
             {
                 throw new ParseException("mismatching parenthesis");
             }
 
-            // Remove outer parentheses and evaluate the content
-            return ParseExpressionContent(expression.GetRange(1, expression.Count - 2));
+            // If expression starts and ends with parentheses, check if they match before removing them
+            if (expression.Count >= 2 &&
+                expression[0]._tkntype == TokenType.LEFT_PAREN &&
+                expression[expression.Count - 1]._tkntype == TokenType.RIGHT_PAREN)
+            {
+                // Verify these parentheses actually match
+                int parenCount = 0;
+                bool matching = true;
+                for (int i = 0; i < expression.Count; i++)
+                {
+                    if (expression[i]._tkntype == TokenType.LEFT_PAREN) { parenCount++; }
+                    else if (expression[i]._tkntype == TokenType.RIGHT_PAREN) { parenCount--; }
+
+                    // If parenCount reaches 0 before the end, the opening paren doesn't match the closing paren
+                    if (parenCount == 0 && i < expression.Count - 1)
+                    {
+                        matching = false;
+                        break;
+                    }
+                }
+
+                // Only strip if they match
+                if (matching && parenCount == 0)
+                {
+                    return ParseExpressionContent(expression.GetRange(1, expression.Count - 2));
+                }
+            }
+
+            // Otherwise parse as-is (handles bare literals and variables)
+            return ParseExpressionContent(expression);
         }
 
         /// <summary>
@@ -104,13 +131,33 @@ namespace Parser
         /// <returns>An ExpressionNode representing nested or flat expressions.</returns>
         private static AST.ExpressionNode ParseExpressionContent(List<Tokenizer.Token> content)
         {
-            if (content.Count == 0) { throw new ParseException("No content"); }
+            if (content.Count == 0) { throw new ParseException("Too small expression to work with"); }
             if (content.Count == 1) { return HandleSingleToken(content[0]); }
 
-            // Strip redundant parentheses and recurse
+            // Strip redundant MATCHING parentheses and recurse
             if (content[0]._tkntype == TokenType.LEFT_PAREN && content[content.Count - 1]._tkntype == TokenType.RIGHT_PAREN)
             {
-                return ParseExpressionContent(content.GetRange(1, content.Count - 2));
+                // Verify these parentheses actually match
+                int parenCount = 0;
+                bool matching = true;
+                for (int i = 0; i < content.Count; i++)
+                {
+                    if (content[i]._tkntype == TokenType.LEFT_PAREN) { parenCount++; }
+                    else if (content[i]._tkntype == TokenType.RIGHT_PAREN) { parenCount--; }
+
+                    // If parenCount reaches 0 before the end, the opening paren doesn't match the closing paren
+                    if (parenCount == 0 && i < content.Count - 1)
+                    {
+                        matching = false;
+                        break;
+                    }
+                }
+
+                // Only strip if they match
+                if (matching && parenCount == 0)
+                {
+                    return ParseExpressionContent(content.GetRange(1, content.Count - 2));
+                }
             }
 
             // Iterate tokens to detect binary operators and split expression
@@ -152,6 +199,7 @@ namespace Parser
         {
             if (token._tkntype == TokenType.INTEGER) { return new LiteralNode(int.Parse(token._value)); }
             if (token._tkntype == TokenType.FLOAT) { return new LiteralNode(double.Parse(token._value)); }
+            if (token._tkntype == TokenType.STRING) { return new LiteralNode(token._value); }
             if (token._tkntype == TokenType.VARIABLE) { return new VariableNode(token._value); }
             throw new ParseException("Unexpected token may not not float or integer or variable");
         }
@@ -195,10 +243,10 @@ namespace Parser
 
             if (content.Count < 3) throw new ParseException("Assignement statement al least need three tokens");
 
-            // Register variable in the symbol table
+            // Register variable in the symbol table with placeholder value
             if (content[1]._tkntype == TokenType.ASSIGNMENT)
             {
-                keyval.Keys.Add(content[0]._value);
+                keyval.Add(content[0]._value, null);
                 return new AST.AssignmentStmt(
                     ParseVariableNode(content[0]._value),
                     ParseExpression(content.GetRange(2, content.Count - 2))
@@ -263,22 +311,29 @@ namespace Parser
                 // Handle nested blocks
                 if (content[0]._tkntype == TokenType.LEFT_CURLY)
                 {
-                    var block = ParseBlockStmt(lines.GetRange(i, lines.Count - i), Data);
-                    stmt.Statements.Add(block);
-
-                    // Skip over nested block lines
+                    // Find the matching closing brace for this nested block
                     int curlyCount = 1;
-                    int lineBeingEaten = i + 1;
-                    while (lineBeingEaten < lines.Count && curlyCount > 0)
+                    int blockEndLine = i + 1;
+
+                    while (blockEndLine < lines.Count && curlyCount > 0)
                     {
-                        foreach (var token in tknzier.Tokenize(lines[lineBeingEaten]))
+                        var lineTokens = tknzier.Tokenize(lines[blockEndLine]);
+                        foreach (var token in lineTokens)
                         {
                             if (token._tkntype == TokenType.LEFT_CURLY) { curlyCount++; }
                             else if (token._tkntype == TokenType.RIGHT_CURLY) { curlyCount--; }
                         }
-                        lineBeingEaten++;
+                        blockEndLine++;
                     }
-                    lines.RemoveRange(i, lineBeingEaten - i);
+
+                    // Extract only the lines for this nested block (from i to blockEndLine-1, inclusive)
+                    int blockLineCount = blockEndLine - i;
+                    var nestedBlockLines = lines.GetRange(i, blockLineCount);
+                    var block = ParseBlockStmt(nestedBlockLines, Data);
+                    stmt.Statements.Add(block);
+
+                    // Remove the processed nested block lines
+                    lines.RemoveRange(i, blockLineCount);
                 }
                 else if (content[0]._tkntype == TokenType.RIGHT_CURLY)
                 {
@@ -293,7 +348,9 @@ namespace Parser
                 }
             }
 
-            throw new ParseException("Missing closing '}' in block.");
+            // If we get here, all lines have been processed
+            // This is normal when called from ParseBlockStmt which has already extracted content
+            return;
         }
 
         /// <summary>
@@ -393,64 +450,127 @@ namespace Parser
         //     }
 
         //     return block;
-private static AST.BlockStmt ParseBlockStmt(List<string> lines, SymbolTable<string, object> parent)
-{
-    var tokenizer = new TokenizerImpl();
-    var tokens = new List<Token>();
-
-    // Flatten lines → token stream
-    foreach (string line in lines)
-        tokens.AddRange(tokenizer.Tokenize(line));
-
-    if (tokens.Count == 0)
-        throw new ParseException("Empty block");
-
-    // Find opening "{"
-    int start = tokens.FindIndex(t => t._tkntype == TokenType.LEFT_CURLY);
-    if (start == -1)
-        throw new ParseException("Missing '{'");
-
-    // Find matching "}"
-    int depth = 0;
-    int end = -1;
-
-    for (int i = start; i < tokens.Count; i++)
-    {
-        if (tokens[i]._tkntype == TokenType.LEFT_CURLY)
-            depth++;
-
-        else if (tokens[i]._tkntype == TokenType.RIGHT_CURLY)
-            depth--;
-
-        if (depth == 0)
+private static AST.BlockStmt ParseBlockStmt(List<string> lines, SymbolTable<string, object> keyval)
         {
-            end = i;
-            break;
-        }
-    }
+            if (lines == null || lines.Count == 0)
+            {
+                throw new ParseException("No strings or null lines provided");
+            }
 
-    if (end == -1)
-        throw new ParseException("Missing '}'");
+            var tknzier = new TokenizerImpl();
+            List<Tokenizer.Token> content = new List<Tokenizer.Token>();
 
-    // Extract inner token slice
-    var innerTokens = tokens.GetRange(start + 1, end - start - 1);
+            // Safely tokenize first line
+            var firstLine = lines[0];
+            if (!string.IsNullOrEmpty(firstLine))
+            {
+                var firstTokens = tknzier.Tokenize(firstLine);
+                if (firstTokens != null)
+                {
+                    content.AddRange(firstTokens);
+                }
+            }
 
-    // Convert inner tokens to lines again (simple version: join into one line)
-    List<string> innerLines = new List<string>();
-    if (innerTokens.Count > 0)
-    {
-        string line = string.Join(" ", innerTokens.Select(t => t._value));
-        innerLines.Add(line);
-    }
+            // Safely tokenize last line if different from first line
+            if (lines.Count > 1)
+            {
+                var lastLine = lines[lines.Count - 1];
+                if (!string.IsNullOrEmpty(lastLine) && lastLine != firstLine)
+                {
+                    var lastTokens = tknzier.Tokenize(lastLine);
+                    if (lastTokens != null)
+                    {
+                        content.AddRange(lastTokens);
+                    }
+                }
+            }
 
-    // Create block scope
-    var scope = new SymbolTable<string, object>(parent);
-    var block = new BlockStmt(scope);
+            // Validate block structure - check if we have both { and } in the content
+            bool hasLeft = false;
+            bool hasRight = false;
 
-    // Use existing statement list parser
-    ParseStmtList(innerLines, block);
+            foreach (var token in content)
+            {
+                if (token?._tkntype == TokenType.LEFT_CURLY)
+                {
+                    hasLeft = true;
+                }
+                else if (token?._tkntype == TokenType.RIGHT_CURLY)
+                {
+                    hasRight = true;
+                }
+            }
 
-    return block;
+            if (!hasLeft || !hasRight)
+            {
+                throw new ParseException("Block must start with '{' and end with '}'");
+            }
+
+            // For multi-line blocks, validate that first/last lines contain ONLY braces
+            if (lines.Count > 1)
+            {
+                var firstTokens = tknzier.Tokenize(lines[0]);
+                var lastTokens = tknzier.Tokenize(lines[lines.Count - 1]);
+
+                // First line should only have '{'
+                if (firstTokens.Count != 1 || firstTokens[0]._tkntype != TokenType.LEFT_CURLY)
+                {
+                    throw new ParseException("Block must start with '{' and end with '}'");
+                }
+
+                // Last line should only have '}'
+                if (lastTokens.Count != 1 || lastTokens[0]._tkntype != TokenType.RIGHT_CURLY)
+                {
+                    throw new ParseException("Block must start with '{' and end with '}'");
+                }
+            }
+
+            SymbolTable<string, object> blockscope = new SymbolTable<string, object>(keyval);
+            AST.BlockStmt block = new BlockStmt(blockscope);
+
+            // Handle single-line blocks (e.g., "{ return (2 ** 3); }")
+            if (lines.Count == 1)
+            {
+                // Tokenize the single line and extract content between { and }
+                var tokens = tknzier.Tokenize(lines[0]);
+                if (tokens != null && tokens.Count > 2)
+                {
+                    // Find the positions of { and }
+                    int leftBraceIndex = -1;
+                    int rightBraceIndex = -1;
+
+                    for (int i = 0; i < tokens.Count; i++)
+                    {
+                        if (tokens[i]._tkntype == TokenType.LEFT_CURLY && leftBraceIndex == -1)
+                        {
+                            leftBraceIndex = i;
+                        }
+                        else if (tokens[i]._tkntype == TokenType.RIGHT_CURLY && rightBraceIndex == -1)
+                        {
+                            rightBraceIndex = i;
+                        }
+                    }
+
+                    // Extract tokens between { and }
+                    if (leftBraceIndex != -1 && rightBraceIndex != -1 && rightBraceIndex > leftBraceIndex + 1)
+                    {
+                        var innerTokens = tokens.GetRange(leftBraceIndex + 1, rightBraceIndex - leftBraceIndex - 1);
+                        if (innerTokens.Count > 0)
+                        {
+                            var statement = ParseStatement(innerTokens, blockscope);
+                            block.Statements.Add(statement);
+                        }
+                    }
+                }
+            }
+            // Multi-line blocks
+            else if (lines.Count > 2)
+            {
+                var innerLines = lines.GetRange(1, lines.Count - 2);
+                ParseStmtList(innerLines, block);
+            }
+
+            return block;
 
 
         #endregion

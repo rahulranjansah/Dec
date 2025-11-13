@@ -398,10 +398,10 @@ namespace Parser.Tests
         {
             // Arrange
             var globalScope = new SymbolTable<string, object>();
-            globalScope["global"] = "global_value";
+            globalScope.Add("global", "global_value");
 
             var functionScope = new SymbolTable<string, object>(globalScope);
-            functionScope["function"] = "function_value";
+            functionScope.Add("function", "function_value");
 
             var blockScope = new SymbolTable<string, object>(functionScope);
 

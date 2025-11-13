@@ -305,7 +305,7 @@ namespace Parser.Tests
         {
             string program = "\n  x := (42)\n}";
             var exception = Assert.Throws<ParseException>(() => Parser.Parse(program));
-            Assert.Contains("must start with", exception.Message, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("Program must have at least opening '{' and closing '}'", exception.Message, StringComparison.OrdinalIgnoreCase);
         }
 
         [Fact]

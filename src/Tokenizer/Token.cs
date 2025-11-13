@@ -22,6 +22,7 @@ namespace Tokenizer
         VARIABLE,     // Identifiers such as variable names
         INTEGER,      // Integer literals (e.g., 42, 0)
         FLOAT,        // Floating-point literals (e.g., 3.14, 0.5)
+        STRING,       // String literals (e.g., "hello")
         ASSIGNMENT,   // Assignment operator ":="
         OPERATOR,     // Arithmetic operators (+, -, *, /, %, **, etc.)
         LEFT_PAREN,   // Opening parenthesis "("
@@ -41,8 +42,8 @@ namespace Tokenizer
         public const string PLUS = "+";
         public const string MINUS = "-";
         public const string TIMES = "*";
-        public const string INT_DIV = "//";  // Floating-point division
-        public const string FLOAT_DIV = "/";     // Integer division
+        public const string INT_DIV = "//";  // int-point division
+        public const string FLOAT_DIV = "/";     // FLoat division
         public const string MOD = "%";         // Modulus operator
         public const string EXP = "**";        // Exponentiation operator
 

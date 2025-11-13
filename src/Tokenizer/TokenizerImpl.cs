@@ -63,7 +63,7 @@ public class TokenizerImpl
                 var token = OperatorsH(input, ref index);
                 if (token != null) {  // Only add non-null tokens
                     TokenList.Add(token);
-                } 
+                }
             }
         }
 
@@ -226,20 +226,20 @@ public class TokenizerImpl
     {
         index++; // Skip opening quote
         string value = "";
-        
+
         while (index < input.Length && input[index] != '"')
         {
             value += input[index];
             index++;
         }
-        
+
         if (index < input.Length && input[index] == '"')
         {
             index++; // Skip closing quote
         }
-        
-        // Return as VARIABLE type since there's no STRING type defined
-        return new Token(value, TokenType.VARIABLE);
+
+        // Return as STRING type
+        return new Token(value, TokenType.STRING);
     }
 
     #endregion

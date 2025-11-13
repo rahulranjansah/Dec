@@ -14,14 +14,12 @@ namespace Containers
     // Parallel data structures to maintain key-value pairs
     private DLL<TKey> _keys;
     private DLL<TValue> _values;
-    private int _size;
     public SymbolTable<TKey, TValue> _parent;
 
     public SymbolTable()
     {
         this._keys = new DLL<TKey>();
         this._values = new DLL<TValue>();
-        this._size = 0;
         this._parent = null;
     }
 
@@ -30,7 +28,6 @@ namespace Containers
         this._parent = parent;
         this._keys = new DLL<TKey>();
         this._values = new DLL<TValue>();
-        this._size = 0;
     }
 
     /// <summary>
@@ -90,10 +87,9 @@ namespace Containers
         if (this.ContainsKeyLocal(item.Key))
             throw new ArgumentException($"Key '{item.Key}' already exists in the symbol table"); //rethink
 
-        // Add to parallel data structures and maintain size
+        // Add to parallel data structures
         this._keys.Add(item.Key);
         this._values.Add(item.Value);
-        this._size++;
     }
 
     public bool Contains(KeyValuePair<TKey, TValue> item) //Needs to Check Parent, look at contains(T item) for reference
@@ -109,10 +105,10 @@ namespace Containers
         int Index = 0;
         if (array == null) throw new ArgumentNullException();
         if (arrayIndex < 0) throw new ArgumentOutOfRangeException();
-        if (array.Length < this._size - arrayIndex) throw new ArgumentException();
+        if (array.Length < this._keys.Count - arrayIndex) throw new ArgumentException();
 
         // Copy key-value pairs from parallel structures to array
-        while (Index < this._size)
+        while (Index < this._keys.Count)
         {
             if (Index >= arrayIndex)
             {
@@ -131,7 +127,6 @@ namespace Containers
         // Remove from both parallel structures at same index
         this._keys.RemoveAt(index);
         this._values.RemoveAt(index);
-        this._size--;
         return true;
     }
 
@@ -141,7 +136,7 @@ namespace Containers
     public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() //use getenum from symbol tables and just step once for O(1).
     {
         int index = 0;
-        while (index < this._size)
+        while (index < this._keys.Count)
         {
             yield return new KeyValuePair<TKey, TValue>(this._keys[index], this._values[index]);
             index++;
@@ -153,11 +148,23 @@ namespace Containers
         return GetEnumerator();
     }
 
-    public void Add(TKey key, TValue value) //check for duplicate keys!!
+    public void Add(TKey key, TValue value) //NOTE: allows duplicate keys!
     {
-        this._keys.Add(key);
-        this._values.Add(value);
-        this._size++;
+        try
+        {
+            this._keys.Add(key);
+            this._values.Add(value);
+        }
+        catch
+        {
+            // If anything fails, ensure lists stay in sync
+            // by removing the key if it was added
+            if (this._keys.Count > this._values.Count)
+            {
+                this._keys.RemoveAt(this._keys.Count - 1);
+            }
+            throw;
+        }
     }
 
     /// <summary>
@@ -182,10 +189,9 @@ namespace Containers
         int index = this._keys.IndexOf(key);
         if (index != -1)
         {
-            // Remove from both parallel structures and update size
+            // Remove from both parallel structures
             this._keys.RemoveAt(index);
             this._values.RemoveAt(index);
-            this._size--;
             return true;
         }
         else return false;
@@ -195,14 +201,13 @@ namespace Containers
     {
         this._keys.Clear();
         this._values.Clear();
-        this._size = 0;
     }
 
     public ICollection<TKey> Keys => this._keys; //properties got at the top by constructors, like instance vars
 
     public ICollection<TValue> Values => this._values;
 
-    public int Count => this._size;
+    public int Count => this._keys.Count;
     public bool IsReadOnly => false;
 
     /// <summary>
@@ -226,13 +231,14 @@ namespace Containers
                 int index = this._keys.IndexOf(key);
                 if (index == -1)
                 {
-                    this._keys.Add(key);
-                    this._values.Add(value);
+                    throw new KeyNotFoundException($"Key '{key}' not found in symbol table");
                 }
-                else
+                // Validate list sync before setting
+                if (index >= this._keys.Count)
                 {
-                    this._values[index] = value;
+                    throw new InvalidOperationException($"Internal error: key index {index} >= size {this._keys.Count}");
                 }
+                this._values[index] = value;
             }
 
         }
@@ -244,6 +250,8 @@ namespace Containers
     public bool ContainsKeyLocal(TKey key)
     {
         if (key == null) throw new ArgumentNullException("Null key");
+        // Check count first to ensure consistency
+        if (this._keys.Count == 0) return false;
         return this._keys.IndexOf(key) != -1;
     }
 

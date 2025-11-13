@@ -139,9 +139,13 @@ namespace AST
             // Validate right-hand side expression first.
             bool expressionValid = node.Expression.Accept(this, param);
 
-            // Add variable to symbol table to mark it as declared in this scope.
+            // Add variable to symbol table only if it doesn't exist locally
+            // (This allows re-assignment to existing variables)
             string varName = node.Variable.Name;
-            symbolTable.Add(varName, null);
+            if (!symbolTable.ContainsKeyLocal(varName))
+            {
+                symbolTable.Add(varName, null);
+            }
 
             return expressionValid;
         }

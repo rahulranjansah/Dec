@@ -211,27 +211,27 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
             // Simulates iterative multiplication through nested blocks.
             // Equivalent to: result = 1*2*3*4*5 = 120
             string program = @"{
-                n := (5)
-                result := (1)
-                counter := (1)
+                n := (5);
+                result := (1);
+                counter := (1);
                 {
-                    result := (result * counter)
-                    counter := (counter + 1)
+                    result := (result * counter);
+                    counter := (counter + 1);
 
                     {
-                        temp := (counter)
+                        temp := (counter);
                     }
 
-                    result := (result * counter)
-                    counter := (counter + 1)
-                    result := (result * counter)
-                    counter := (counter + 1)
-                    result := (result * counter)
-                    counter := (counter + 1)
-                    result := (result * counter)
-                    counter := (counter + 1)
+                    result := (result * counter);
+                    counter := (counter + 1);
+                    result := (result * counter);
+                    counter := (counter + 1);
+                    result := (result * counter);
+                    counter := (counter + 1);
+                    result := (result * counter);
+                    counter := (counter + 1);
 
-                    return (result)
+                    return (result);
                 }
             }";
 

@@ -88,7 +88,7 @@ namespace AST
             object right = node.Right.Accept(this, symbolTable);
             double r = Convert.ToDouble(right);
             if (r == 0.0)
-                throw new EvaluationException("Cannot divide by zero");
+                throw new EvaluationException("Division by zero");
 
             double l = Convert.ToDouble(left);
             return l / r;
@@ -100,7 +100,7 @@ namespace AST
             object right = node.Right.Accept(this, symbolTable);
             int r = Convert.ToInt32(right);
             if (r == 0)
-                throw new EvaluationException("Cannot divide by zero");
+                throw new EvaluationException("Division by zero");
 
             int l = Convert.ToInt32(left);
             return l / r;
@@ -113,7 +113,7 @@ namespace AST
 
             if (left is int l && right is int r)
             {
-                if (r == 0) { throw new EvaluationException("Cannot divide by zero"); }
+                if (r == 0) { throw new EvaluationException("Division by zero"); }
                 return l % r;
             }
             if (Convert.ToDouble(right) == 0.0) { throw new EvaluationException("Cannot divide by float zero"); }
@@ -157,22 +157,30 @@ namespace AST
 
         public object Visit(AssignmentStmt node, SymbolTable<string, object> symbolTable)
         {
-            // two jobs accpets the change
+            // Evaluate the expression and get the value
             object value = node.Expression.Accept(this, symbolTable);
             string name = node.Variable.Name;
 
+            // Check if variable exists locally
             if (symbolTable.ContainsKeyLocal(name))
             {
+                // Variable exists locally - update it
                 symbolTable[name] = value;
             }
-            else { symbolTable.Add(name, value); }
+            else
+            {
+                // Variable doesn't exist locally - add it (handles both new vars and shadowing)
+                symbolTable.Add(name, value);
+            }
 
             return _returnValue;
         }
 
         public object Visit(ReturnStmt node, SymbolTable<string, object> symbolTable)
         {
-            return node.Expression.Accept(this, symbolTable);
+            _returnValue = node.Expression.Accept(this, symbolTable);
+            _returnEncountered = true;
+            return _returnValue;
         }
 
         public object Visit(BlockStmt node, SymbolTable<string, object> symbolTable)
@@ -182,8 +190,13 @@ namespace AST
 
             foreach (var stmt in node.Statements)
             {
-                object result = stmt.Accept(this, currentScope);
-                if (result != null) { return result; }
+                stmt.Accept(this, currentScope);
+
+                // If a return statement was encountered, stop processing and return
+                if (_returnEncountered)
+                {
+                    return _returnValue;
+                }
             }
             return _returnValue;
         }
