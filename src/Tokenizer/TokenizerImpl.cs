@@ -190,13 +190,9 @@ public class TokenizerImpl
             return new Token(element, TokenType.OPERATOR);
         }
 
-        if (char.IsWhiteSpace(input[index]) || input[index] == ';')
-        {
-            index++;          // advance index
-            return null;      // signal: no token produced
-        }
-
-        throw new ArgumentException("Invalid character");
+        // Whitespace is already handled at the top of the main loop
+        // Semicolons are NOT part of the DEC language specification
+        throw new ArgumentException($"Invalid character: '{input[index]}'");
 
 
     }

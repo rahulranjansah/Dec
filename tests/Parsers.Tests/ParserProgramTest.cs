@@ -85,12 +85,12 @@ namespace Parser.Tests
         public void Parse_SimpleExpressions_ReturnsCorrectAST()
         {
             string program = @"{
-  a := (5)
-  b := (10)
-  c := (a + b)
-  d := (c * 2)
-  return (d)
-}";
+                            a := (5)
+                            b := (10)
+                            c := (a + b)
+                            d := (c * 2)
+                            return (d)
+                          }";
             var result = Parser.Parse(program);
 
             Assert.NotNull(result);
@@ -127,13 +127,13 @@ namespace Parser.Tests
         public void Parse_NestedBlock_ReturnsCorrectAST()
         {
             string program = @"{
-  x := (10)
-  {
-    y := (x + 5)
-    z := (y * 2)
-  }
-  return (x)
-}";
+                                    x := (10)
+                                    {
+                                      y := (x + 5)
+                                      z := (y * 2)
+                                    }
+                                    return (x)
+                                  }";
             var result = Parser.Parse(program);
 
             Assert.NotNull(result);
@@ -171,15 +171,15 @@ namespace Parser.Tests
         public void Parse_AllOperators_ReturnsCorrectAST()
         {
             string program = @"{
-  a := (5 + 3)
-  b := (10 - 2)
-  c := (4 * 6)
-  d := (8 / 2)
-  e := (9 // 2)
-  f := (10 % 3)
-  g := (2 ** 3)
-  return (a)
-}";
+                                a := (5 + 3)
+                                b := (10 - 2)
+                                c := (4 * 6)
+                                d := (8 / 2)
+                                e := (9 // 2)
+                                f := (10 % 3)
+                                g := (2 ** 3)
+                                return (a)
+                              }";
             var result = Parser.Parse(program);
 
             Assert.NotNull(result);
@@ -209,18 +209,18 @@ namespace Parser.Tests
         public void Parse_MultipleNestedBlocks_ReturnsCorrectAST()
         {
             string program = @"{
-  a := (1)
-  {
-    b := (2)
-    {
-      c := (3)
-      {
-        d := (4)
-      }
-    }
-  }
-  return (a)
-}";
+                                a := (1)
+                                {
+                                  b := (2)
+                                  {
+                                    c := (3)
+                                    {
+                                      d := (4)
+                                    }
+                                  }
+                                }
+                                return (a)
+                              }";
             var result = Parser.Parse(program);
 
             Assert.NotNull(result);
@@ -259,15 +259,15 @@ namespace Parser.Tests
         public void Parse_ParallelBlocks_ReturnsCorrectAST()
         {
             string program = @"{
-  a := (1)
-  {
-    b := (2)
-  }
-  {
-    c := (3)
-  }
-  return (a)
-}";
+                                a := (1)
+                                {
+                                  b := (2)
+                                }
+                                {
+                                  c := (3)
+                                }
+                                return (a)
+                              }";
             var result = Parser.Parse(program);
 
             Assert.NotNull(result);
@@ -330,12 +330,12 @@ namespace Parser.Tests
         public void Parse_UnparseAndVerifyStatementTypes()
         {
             string program = @"{
-  a := (1)
-  {
-    b := (2)
-  }
-  return (a)
-}";
+                                    a := (1)
+                                    {
+                                      b := (2)
+                                    }
+                                    return (a)
+                                  }";
             var result = Parser.Parse(program);
             Assert.Equal(3, result.Statements.Count);
 

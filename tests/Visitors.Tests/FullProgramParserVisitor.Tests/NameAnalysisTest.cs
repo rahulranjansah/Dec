@@ -29,9 +29,9 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         public void FullProgram_SimpleArithmetic_ReturnsCorrectValue()
         {
             string code = @"{
-                x := 3;
-                y := (x + 5) * 2;
-                return y;
+                x := (3)
+                y := ((x + 5) * 2)
+                return (y)
             }";
 
             var ast = Parser.Parser.Parse(code);
@@ -46,10 +46,10 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         public void FullProgram_NestedBlocks_ShadowingResolvesCorrectly()
         {
             string code = @"{
-                x := 5;
+                x := (5)
                 {
-                    x := (x + 10);
-                    return x;
+                    x := (x + 10)
+                    return (x)
                 }
             }";
 
@@ -65,8 +65,8 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         public void FullProgram_ChainedArithmetic_EvaluatesCorrectly()
         {
             string code = @"{
-                a := (2 + 3) * (4 - 1);
-                return a ** 2;
+                a := (2 + 3) * (4 - 1)
+                return a ** 2
             }";
 
             var ast = Parser.Parser.Parse(code);
@@ -82,8 +82,8 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         public void FullProgram_UndeclaredVariable_FailsAnalysis()
         {
             string code = @"{
-                x := 3;
-                return y;
+                x := (3)
+                return (y)
             }";
 
             var ast = Parser.Parser.Parse(code);
@@ -95,8 +95,8 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         public void FullProgram_ExpressionUsesUndeclaredVariable_Fails()
         {
             string code = @"{
-                result := (a + 1);
-                return result;
+                result := (a + 1)
+                return (result)
             }";
 
             var ast = Parser.Parser.Parse(code);
@@ -111,9 +111,9 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         public void FullProgram_DivideByZero_ThrowsEvaluationException()
         {
             string code = @"{
-                x := 10;
-                y := (x / 0);
-                return y;
+                x := (10)
+                y := (x / 0)
+                return (y)
             }";
 
             var ast = Parser.Parser.Parse(code);
@@ -126,17 +126,17 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         public void FullProgram_IntDivAndModulus_ReturnExpectedValues()
         {
             string code = @"{
-                a := 10;
-                b := (a // 3);
-                c := (a % 3);
-                return (b + c);
+                a := (10)
+                b := (a // 3)
+                c := (a % 3)
+                return (b + c)
             }";
 
             var ast = Parser.Parser.Parse(code);
             Assert.True(ast.Accept(_analyzer, Scope()));
 
             var result = _evaluator.Evaluate(ast);
-            Assert.Equal(4 + 1, Convert.ToInt32(result));
+            Assert.Equal(4, Convert.ToInt32(result)); // 10 // 3 = 3, 10 % 3 = 1, so 3 + 1 = 4
         }
 
         // -------------------------------------------------
@@ -147,9 +147,9 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         public void FullProgram_MixedNumericTypes_ReturnsDouble()
         {
             string code = @"{
-                a := 2;
-                b := 3.5;
-                return (a * b);
+                a := (2)
+                b := (3.5)
+                return (a * b)
             }";
 
             var ast = Parser.Parser.Parse(code);
@@ -163,9 +163,9 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         public void FullProgram_LiteralPropagation_Works()
         {
             string code = @"{
-                msg := ""hello"";
-                num := 42;
-                return num;
+                msg := (""hello"")
+                num := (42)
+                return (num)
             }";
 
             var ast = Parser.Parser.Parse(code);

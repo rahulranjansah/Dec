@@ -28,13 +28,13 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         // -----------------------------------------------------
 
         [Theory(DisplayName = "Full program arithmetic expressions evaluate correctly")]
-        [InlineData(@"{ return (3 + 5); }", 8)]
-        [InlineData(@"{ return (10 - 4); }", 6)]
-        [InlineData(@"{ return (2 * 5); }", 10)]
-        [InlineData(@"{ return (9 / 3); }", 3.0)]
-        [InlineData(@"{ return (9 // 2); }", 4)]
-        [InlineData(@"{ return (10 % 3); }", 1)]
-        [InlineData(@"{ return (2 ** 3); }", 8)]
+        [InlineData(@"{return (3 + 5)}", 8)]
+        [InlineData(@"{return (10 - 4)}", 6)]
+        [InlineData(@"{return (2 * 5)}", 10)]
+        [InlineData(@"{return (9 / 3)}", 3.0)]
+        [InlineData(@"{return (9 // 2)}", 4)]
+        [InlineData(@"{return (10 % 3)}", 1)]
+        [InlineData(@"{return (2 ** 3)}", 8)]
         public void Evaluate_ArithmeticPrograms_ReturnsExpected(string program, object expected)
         {
             var ast = Parser.Parser.Parse(program);
@@ -52,8 +52,8 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         public void Evaluate_AssignmentAndReturn_ProducesCorrectResult()
         {
             string code = @"{
-                x := 42;
-                return x;
+                x := (42)
+                return (x)
             }";
 
             var ast = Parser.Parser.Parse(code);
@@ -67,10 +67,10 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         public void Evaluate_SequentialStatements_EvaluateCorrectly()
         {
             string code = @"{
-                a := 3;
-                b := (a + 7);
-                c := (b * 2);
-                return c;
+                a := (3)
+                b := (a + 7)
+                c := (b * 2)
+                return (c)
             }";
 
             var ast = Parser.Parser.Parse(code);
@@ -88,10 +88,10 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         public void Evaluate_NestedBlocks_ShadowingWorks()
         {
             string code = @"{
-                x := 10;
+                x := (10)
                 {
-                    x := (x + 5);
-                    return x;
+                    x := (x + 5)
+                    return (x)
                 }
             }";
 
@@ -106,12 +106,12 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         public void Evaluate_NestedBlocks_PreserveOuterScope()
         {
             string code = @"{
-                x := 4;
+                x := (4)
                 {
-                    y := (x * 2);
-                    return y;
+                    y := (x * 2)
+                    return (y)
                 }
-                return x;  // unreachable in current semantics but safe to test
+                return (x)
             }";
 
             var ast = Parser.Parser.Parse(code);
@@ -126,9 +126,9 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         // -----------------------------------------------------
 
         [Theory(DisplayName = "Full program: divide or modulus by zero throws EvaluationException")]
-        [InlineData(@"{ return (5 / 0); }")]
-        [InlineData(@"{ return (5 // 0); }")]
-        [InlineData(@"{ return (5 % 0); }")]
+        [InlineData(@"{return (5 / 0)}")]
+        [InlineData(@"{return (5 // 0)}")]
+        [InlineData(@"{return (5 % 0)}")]
         public void Evaluate_DivideOrModulusByZero_Throws(string code)
         {
             var ast = Parser.Parser.Parse(code);
@@ -141,7 +141,7 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         public void Evaluate_UndeclaredVariable_FailsAnalysis()
         {
             string code = @"{
-                return ghost;
+                return (ghost)
             }";
 
             var ast = Parser.Parser.Parse(code);
@@ -157,8 +157,8 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         public void Evaluate_ComplexNestedExpression_ReturnsCorrectValue()
         {
             string code = @"{
-                result := ((3 + 2) * (4 - 1)) ** 2;
-                return result;
+                result := (((3 + 2) * (4 - 1)) ** 2)
+                return (result)
             }";
 
             var ast = Parser.Parser.Parse(code);
@@ -172,9 +172,9 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         public void Evaluate_MixedIntFloatExpression_ReturnsDouble()
         {
             string code = @"{
-                a := 2;
-                b := 3.5;
-                return (a * b);
+                a := (2)
+                b := (3.5)
+                return (a * b)
             }";
 
             var ast = Parser.Parser.Parse(code);
@@ -189,9 +189,9 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         // -----------------------------------------------------
 
         [Theory(DisplayName = "Full program literal returns correct value for all types")]
-        [InlineData(@"{ return 42; }", 42)]
-        [InlineData(@"{ return 3.14; }", 3.14)]
-        [InlineData(@"{ return ""hello""; }", "hello")]
+        [InlineData(@"{return (42)}", 42)]
+        [InlineData(@"{return (3.14)}", 3.14)]
+        [InlineData(@"{return (""hello"")}", "hello")]
         public void Evaluate_LiteralPrograms_ReturnExpected(string code, object expected)
         {
             var ast = Parser.Parser.Parse(code);
@@ -211,27 +211,27 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
             // Simulates iterative multiplication through nested blocks.
             // Equivalent to: result = 1*2*3*4*5 = 120
             string program = @"{
-                n := (5);
-                result := (1);
-                counter := (1);
+                n := (5)
+                result := (1)
+                counter := (1)
                 {
-                    result := (result * counter);
-                    counter := (counter + 1);
+                    result := (result * counter)
+                    counter := (counter + 1)
 
                     {
-                        temp := (counter);
+                        temp := (counter)
                     }
 
-                    result := (result * counter);
-                    counter := (counter + 1);
-                    result := (result * counter);
-                    counter := (counter + 1);
-                    result := (result * counter);
-                    counter := (counter + 1);
-                    result := (result * counter);
-                    counter := (counter + 1);
+                    result := (result * counter)
+                    counter := (counter + 1)
+                    result := (result * counter)
+                    counter := (counter + 1)
+                    result := (result * counter)
+                    counter := (counter + 1)
+                    result := (result * counter)
+                    counter := (counter + 1)
 
-                    return (result);
+                    return (result)
                 }
             }";
 

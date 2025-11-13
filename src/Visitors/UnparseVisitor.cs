@@ -79,12 +79,12 @@ namespace AST
         public string Visit(AssignmentStmt node, int level)
         {
             string indent = GeneralUtils.GetIndentation(level);
-            return $"{indent}{node.Variable.Unparse()} := {node.Expression.Unparse()};";
+            return $"{indent}{node.Variable.Unparse()} := {node.Expression.Unparse()}";
         }
         public string Visit(ReturnStmt node, int level)
         {
             string indent = GeneralUtils.GetIndentation(level);
-            return $"{indent}return {node.Expression.Unparse()};";
+            return $"{indent}return {node.Expression.Unparse()}";
         }
 
         public string Visit(BlockStmt node, int level)

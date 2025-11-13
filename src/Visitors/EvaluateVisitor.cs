@@ -161,15 +161,15 @@ namespace AST
             object value = node.Expression.Accept(this, symbolTable);
             string name = node.Variable.Name;
 
-            // Check if variable exists locally
-            if (symbolTable.ContainsKeyLocal(name))
+            // Check if variable exists in current or parent scopes
+            if (symbolTable.ContainsKey(name))
             {
-                // Variable exists locally - update it
+                // Variable exists somewhere in the scope chain - update it
                 symbolTable[name] = value;
             }
             else
             {
-                // Variable doesn't exist locally - add it (handles both new vars and shadowing)
+                // Variable doesn't exist anywhere - create new one
                 symbolTable.Add(name, value);
             }
 

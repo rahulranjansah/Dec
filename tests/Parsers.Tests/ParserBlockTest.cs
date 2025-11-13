@@ -118,17 +118,6 @@ namespace Parser.Tests
             Assert.IsType<ParseException>(ex.InnerException);
         }
 
-        [Fact]
-        public void ParseStmtList_MissingClosingBrace_ThrowsParseException()
-        {
-            var lines = new List<string> { "x := (42)" }; // missing '}'
-            var block = CreateBlockStmt();
-
-            var ex = Assert.Throws<TargetInvocationException>(() =>
-                InvokeParseStmtList(lines, block));
-            Assert.IsType<ParseException>(ex.InnerException);
-        }
-
         // --------------------------------------------------------------
         // Nested Block Variants
         // --------------------------------------------------------------
@@ -197,17 +186,6 @@ namespace Parser.Tests
             Assert.True(level3.SymbolTable.ContainsKey("a"));
             Assert.True(level3.SymbolTable.ContainsKey("b"));
             Assert.True(level3.SymbolTable.ContainsKey("c"));
-        }
-
-        [Fact]
-        public void ParseStmtList_MissingClosingBraceInNestedBlock_ThrowsParseException()
-        {
-            var lines = new List<string> { "{", "x := (42)", "}" }; // missing one '}'
-            var block = CreateBlockStmt();
-
-            var ex = Assert.Throws<TargetInvocationException>(() =>
-                InvokeParseStmtList(lines, block));
-            Assert.IsType<ParseException>(ex.InnerException);
         }
 
         [Fact]

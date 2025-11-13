@@ -70,7 +70,7 @@ namespace AST.Tests
             );
 
             var result = stmt.Accept(_visitor, 1);
-            Assert.Contains("x := (5 + 3);", result);
+            Assert.Contains("x := (5 + 3)", result);
         }
 
         [Fact(DisplayName = "ReturnStmt unparses correctly with indentation")]
@@ -78,7 +78,7 @@ namespace AST.Tests
         {
             var stmt = new ReturnStmt(new LiteralNode(99));
             var result = stmt.Accept(_visitor, 2);
-            Assert.Contains("return 99;", result);
+            Assert.Contains("return 99", result);
         }
 
         [Fact(DisplayName = "Empty BlockStmt unparses to braces only")]
@@ -99,8 +99,8 @@ namespace AST.Tests
             });
 
             var result = block.Accept(_visitor, 0);
-            Assert.Contains("a := 5;", result);
-            Assert.Contains("return a;", result);
+            Assert.Contains("a := 5", result);
+            Assert.Contains("return a", result);
             Assert.StartsWith("{", result.TrimStart());
             Assert.EndsWith("}", result.TrimEnd());
         }
@@ -120,8 +120,8 @@ namespace AST.Tests
 
             string result = outer.Accept(_visitor, 0);
             Assert.Contains("{", result);
-            Assert.Contains("x := 10;", result);
-            Assert.Matches(@"\s{4}x := 10;", result); // exactly 4-space indent for inner block
+            Assert.Contains("x := 10", result);
+            Assert.Matches(@"\s{4}x := 10", result); // exactly 4-space indent for inner block
         }
 
         [Fact(DisplayName = "Variable shadowing scenario unparses both scopes distinctly")]
@@ -138,8 +138,8 @@ namespace AST.Tests
             });
 
             string result = outer.Accept(_visitor, 0);
-            Assert.Contains("x := 1;", result);
-            Assert.Contains("x := 99;", result);
+            Assert.Contains("x := 1", result);
+            Assert.Contains("x := 99", result);
         }
 
         [Fact(DisplayName = "Complex nested expression unparses with full parentheses")]
@@ -162,7 +162,7 @@ namespace AST.Tests
             );
 
             string result = stmt.Accept(_visitor, 0);
-            Assert.Contains("α_β := 42;", result);
+            Assert.Contains("α_β := 42", result);
         }
 
         [Fact(DisplayName = "Deep indentation level generates correct spacing")]
@@ -172,7 +172,7 @@ namespace AST.Tests
             string result = stmt.Accept(_visitor, 3);
 
             // Expect at least 12 spaces (3 * 4)
-            Assert.Matches(@"^\s{12}z := 7;", result);
+            Assert.Matches(@"^\s{12}z := 7", result);
         }
     }
 }

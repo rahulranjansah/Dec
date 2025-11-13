@@ -226,20 +226,31 @@ namespace Containers
                 throw new KeyNotFoundException($"Key '{key}' not found");
             }
 
-            set
+        set
+        {
+            // Check if key exists locally first
+            int index = this._keys.IndexOf(key);
+            if (index != -1)
             {
-                int index = this._keys.IndexOf(key);
-                if (index == -1)
-                {
-                    throw new KeyNotFoundException($"Key '{key}' not found in symbol table");
-                }
-                // Validate list sync before setting
+                // Update locally
                 if (index >= this._keys.Count)
                 {
                     throw new InvalidOperationException($"Internal error: key index {index} >= size {this._keys.Count}");
                 }
                 this._values[index] = value;
             }
+            // Check parent scope
+            else if (this._parent != null && this._parent.ContainsKey(key))
+            {
+                // Update in parent scope
+                this._parent[key] = value;
+            }
+            else
+            {
+                // Key not found anywhere in the scope chain
+                throw new KeyNotFoundException($"Key '{key}' not found in symbol table");
+            }
+        }
 
         }
 

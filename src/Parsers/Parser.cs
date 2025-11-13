@@ -243,12 +243,17 @@ namespace Parser
 
             if (content.Count < 3) throw new ParseException("Assignement statement al least need three tokens");
 
-            // Register variable in the symbol table with placeholder value
+            // Register variable in the symbol table during parsing
+            // But only if it doesn't already exist (to avoid creating unwanted shadow variables)
             if (content[1]._tkntype == TokenType.ASSIGNMENT)
             {
-                keyval.Add(content[0]._value, null);
+                string varName = content[0]._value;
+                if (!keyval.ContainsKey(varName))
+                {
+                    keyval.Add(varName, null);  // Placeholder value during parsing
+                }
                 return new AST.AssignmentStmt(
-                    ParseVariableNode(content[0]._value),
+                    ParseVariableNode(varName),
                     ParseExpression(content.GetRange(2, content.Count - 2))
                 );
             }
@@ -326,6 +331,12 @@ namespace Parser
                         blockEndLine++;
                     }
 
+                    // Check if we found the matching closing brace
+                    if (curlyCount > 0)
+                    {
+                        throw new ParseException("Missing closing '}' for nested block");
+                    }
+
                     // Extract only the lines for this nested block (from i to blockEndLine-1, inclusive)
                     int blockLineCount = blockEndLine - i;
                     var nestedBlockLines = lines.GetRange(i, blockLineCount);
@@ -348,8 +359,8 @@ namespace Parser
                 }
             }
 
-            // If we get here, all lines have been processed
-            // This is normal when called from ParseBlockStmt which has already extracted content
+            // If we get here, all lines have been processed without encountering '}'
+            // This is normal when called from ParseBlockStmt which has already extracted inner content
             return;
         }
 
