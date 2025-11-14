@@ -199,7 +199,6 @@ namespace Parser
         {
             if (token._tkntype == TokenType.INTEGER) { return new LiteralNode(int.Parse(token._value)); }
             if (token._tkntype == TokenType.FLOAT) { return new LiteralNode(double.Parse(token._value)); }
-            if (token._tkntype == TokenType.STRING) { return new LiteralNode(token._value); }
             if (token._tkntype == TokenType.VARIABLE) { return new VariableNode(token._value); }
             throw new ParseException("Unexpected token may not not float or integer or variable");
         }
@@ -367,101 +366,7 @@ namespace Parser
         /// <summary>
         /// Parses a block statement delimited by '{' and '}' into a BlockStmt AST node.
         /// </summary>
-        // private static AST.BlockStmt ParseBlockStmt(List<string> lines, SymbolTable<string, object> keyval)
-        // {
-        //     if (lines.Count == 0) { throw new ParseException("No strings"); }
-
-        //     var tknzier = new TokenizerImpl();
-        //     List<Tokenizer.Token> content = [];
-
-        //     content.AddRange(tknzier.Tokenize(lines[0]));
-        //     content.AddRange(tknzier.Tokenize(lines[lines.Count - 1]));
-
-        //     // Validate block structure
-        //     if (content.Count != 2 ||
-        //         content[0]._tkntype != TokenType.LEFT_CURLY ||
-        //         content[1]._tkntype != TokenType.RIGHT_CURLY)
-        //     {
-        //         throw new ParseException("Block must start with '{' and end with '}'");
-        //     }
-
-        //     SymbolTable<string, object> blockscope = new SymbolTable<string, object>(keyval);
-        //     AST.BlockStmt block = new BlockStmt(blockscope);
-
-        //     // Recursively parse contained statements
-        //     ParseStmtList(lines.GetRange(1, lines.Count - 1), block);
-
-        //     return block;
-        // }
-
-        // private static AST.BlockStmt ParseBlockStmt(List<string> lines, SymbolTable<string, object> keyval)
-        // {
-        //     if (lines == null || lines.Count == 0)
-        //     {
-        //         throw new ParseException("No strings or null lines provided");
-        //     }
-
-        //     var tknzier = new TokenizerImpl();
-        //     List<Tokenizer.Token> content = new List<Tokenizer.Token>();
-
-        //     // Safely tokenize first line
-        //     var firstLine = lines[0];
-        //     if (!string.IsNullOrEmpty(firstLine))
-        //     {
-        //         var firstTokens = tknzier.Tokenize(firstLine);
-        //         if (firstTokens != null)
-        //         {
-        //             content.AddRange(firstTokens);
-        //         }
-        //     }
-
-        //     // Safely tokenize last line if different from first line
-        //     if (lines.Count > 1)
-        //     {
-        //         var lastLine = lines[lines.Count - 1];
-        //         if (!string.IsNullOrEmpty(lastLine) && lastLine != firstLine)
-        //         {
-        //             var lastTokens = tknzier.Tokenize(lastLine);
-        //             if (lastTokens != null)
-        //             {
-        //                 content.AddRange(lastTokens);
-        //             }
-        //         }
-        //     }
-
-        //     // Validate block structure - check if we have both { and } in the content
-        //     bool hasLeft = false;
-        //     bool hasRight = false;
-
-        //     foreach (var token in content)
-        //     {
-        //         if (token?._tkntype == TokenType.LEFT_CURLY)
-        //         {
-        //             hasLeft = true;
-        //         }
-        //         else if (token?._tkntype == TokenType.RIGHT_CURLY)
-        //         {
-        //             hasRight = true;
-        //         }
-        //     }
-
-        //     if (!hasLeft || !hasRight)
-        //     {
-        //         throw new ParseException("Block must start with '{' and end with '}'");
-        //     }
-
-        //     SymbolTable<string, object> blockscope = new SymbolTable<string, object>(keyval);
-        //     AST.BlockStmt block = new BlockStmt(blockscope);
-
-        //     // Only parse statements if there are lines between { and }
-        //     if (lines.Count > 2)
-        //     {
-        //         var innerLines = lines.GetRange(1, lines.Count - 2);
-        //         ParseStmtList(innerLines, block);
-        //     }
-
-        //     return block;
-private static AST.BlockStmt ParseBlockStmt(List<string> lines, SymbolTable<string, object> keyval)
+        private static AST.BlockStmt ParseBlockStmt(List<string> lines, SymbolTable<string, object> keyval)
         {
             if (lines == null || lines.Count == 0)
             {
@@ -502,11 +407,11 @@ private static AST.BlockStmt ParseBlockStmt(List<string> lines, SymbolTable<stri
 
             foreach (var token in content)
             {
-                if (token?._tkntype == TokenType.LEFT_CURLY)
+                if (token._tkntype == TokenType.LEFT_CURLY)
                 {
                     hasLeft = true;
                 }
-                else if (token?._tkntype == TokenType.RIGHT_CURLY)
+                else if (token._tkntype == TokenType.RIGHT_CURLY)
                 {
                     hasRight = true;
                 }
@@ -539,7 +444,7 @@ private static AST.BlockStmt ParseBlockStmt(List<string> lines, SymbolTable<stri
             SymbolTable<string, object> blockscope = new SymbolTable<string, object>(keyval);
             AST.BlockStmt block = new BlockStmt(blockscope);
 
-            // Handle single-line blocks (e.g., "{ return (2 ** 3); }")
+            // Handle single-line blocks (e.g., "{ return (2 ** 3) }")
             if (lines.Count == 1)
             {
                 // Tokenize the single line and extract content between { and }

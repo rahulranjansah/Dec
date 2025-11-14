@@ -191,7 +191,6 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         [Theory(DisplayName = "Full program literal returns correct value for all types")]
         [InlineData(@"{return (42)}", 42)]
         [InlineData(@"{return (3.14)}", 3.14)]
-        [InlineData(@"{return (""hello"")}", "hello")]
         public void Evaluate_LiteralPrograms_ReturnExpected(string code, object expected)
         {
             var ast = Parser.Parser.Parse(code);

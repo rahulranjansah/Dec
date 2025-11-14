@@ -159,7 +159,42 @@ Track Changes to the Solution File
 dotnet sln Compiler.sln list
 dotnet sln Compiler.sln remove src/Utilities/Containers/Containers.csproj
 ```
+Fancy way to check tests succinctly
+```bash
+dotnet build 2>&1 | tail -3 && dotnet test --no-build 2>&1 | grep -E "Failed.*Passed.*Total"
+```
 
+## Map
+
+┌────────────────────────────────────────────────────────────┐
+│                    COMPILER PIPELINE                        │
+└────────────────────────────────────────────────────────────┘
+
+1. SOURCE CODE (string)
+   "{ x := (10); return (x + 5) }"
+                ↓
+2. TOKENIZER
+   ['{', 'x', ':=', '(', '10', ')', 'return', '(', 'x', '+', '5', ')', '}']
+                ↓
+3. PARSER ← Creates the AST
+   BlockStmt {
+     Statements: [AssignmentStmt(...), ReturnStmt(...)]
+   }
+                ↓
+4. AST (tree structure) ← The program representation
+                ↓
+5. NAME ANALYSIS (visitor)
+   Uses: AST + SymbolTable
+   Walks the tree, registers variable names
+   SymbolTable = { "x": null }
+                ↓
+6. EVALUATION (visitor)
+   Uses: AST + SymbolTable
+   Walks the tree, computes values
+   SymbolTable = { "x": 10 }
+                ↓
+7. RESULT
+   15
 
 ## Requirements
 

@@ -1,3 +1,20 @@
+/**
+ * UnparseVisitor.cs
+ * Converts AST nodes back into a source-like string representation.
+ *
+ * This visitor walks the Abstract Syntax Tree and reconstructs the
+ * textual form of expressions and statements. The goal is to produce
+ * readable, structurally correct output that mirrors the original
+ * program as closely as possible, including parentheses for preserving
+ * operator precedence.
+ *
+ * Bugs: May introduce unnecessary parentheses or whitespace since
+ *        formatting is purely structural rather than layout-aware.
+ *
+ * @author Rahul, Rick, Zachary
+ * @date 2025-11-10
+ */
+
 using System;
 using System.Text;
 using AST;

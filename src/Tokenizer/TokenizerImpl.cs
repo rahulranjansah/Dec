@@ -52,12 +52,6 @@ public class TokenizerImpl
                 index++;
             }
 
-            // String literals → handled by StringLiteralH
-            else if (currentChar == '"')
-            {
-                TokenList.Add(StringLiteralH(input, ref index));
-            }
-
             // Operators (+, -, *, /, :=, etc.) → handled by OperatorsH
             else {
                 var token = OperatorsH(input, ref index);
@@ -210,32 +204,6 @@ public class TokenizerImpl
         else if (letter == TokenConstants.LEFT_PAREN) { return new Token(letter, TokenType.LEFT_PAREN); }
         else if (letter == TokenConstants.RIGHT_PAREN) { return new Token(letter, TokenType.RIGHT_PAREN); }
         else { throw new ArgumentException("Invalid character"); }
-    }
-
-    /// <summary>
-    /// Handles string literals enclosed in double quotes.
-    /// </summary>
-    /// <param name="input">The input string.</param>
-    /// <param name="index">Reference index into the string.</param>
-    /// <returns>A Token representing the string literal.</returns>
-    private Token StringLiteralH(string input, ref int index)
-    {
-        index++; // Skip opening quote
-        string value = "";
-
-        while (index < input.Length && input[index] != '"')
-        {
-            value += input[index];
-            index++;
-        }
-
-        if (index < input.Length && input[index] == '"')
-        {
-            index++; // Skip closing quote
-        }
-
-        // Return as STRING type
-        return new Token(value, TokenType.STRING);
     }
 
     #endregion

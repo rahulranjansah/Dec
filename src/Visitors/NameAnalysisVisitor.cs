@@ -1,6 +1,6 @@
 /**
  * NameAnalysisVisitor.cs
- *
+ * Bool checker
  * Implements a visitor that performs name analysis over an Abstract Syntax Tree (AST).
  * The purpose of this visitor is to ensure that all variables are properly declared
  * within scope before being referenced, and to register variable names when they are

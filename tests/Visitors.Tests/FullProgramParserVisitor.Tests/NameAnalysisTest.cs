@@ -163,8 +163,8 @@ namespace AST.Visitors.Tests.FullProgramParserVisitor.Tests
         public void FullProgram_LiteralPropagation_Works()
         {
             string code = @"{
-                msg := (""hello"")
                 num := (42)
+                floatVal := (3.14)
                 return (num)
             }";
 
