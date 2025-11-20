@@ -186,11 +186,11 @@ namespace AST
         public object Visit(BlockStmt node, SymbolTable<string, object> symbolTable)
         {
             // Use this block's symbol table, which is already linked to its parent
-            SymbolTable<string, object> currentScope = node.SymbolTable;
+            SymbolTable<string, object> givenScope = node.SymbolTable;
 
             foreach (var stmt in node.Statements)
             {
-                stmt.Accept(this, currentScope);
+                stmt.Accept(this, givenScope);
 
                 // If a return statement was encountered, stop processing and return
                 if (_returnEncountered)
