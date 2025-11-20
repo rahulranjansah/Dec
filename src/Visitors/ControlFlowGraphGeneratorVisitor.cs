@@ -39,11 +39,10 @@ namespace AST
         /// starting at the provided root statement.
         /// </summary>
         /// <param name="start">Entry statement of the program.</param>
-        public ControlFlowGraphGeneratorVisitor(Statement start)
+        public ControlFlowGraphGeneratorVisitor()
         {
             // Create graph and add initial vertex (must not be a bare block “{”)
             CFG = new DiGraph<Statement>();
-            CFG.AddVertex(start);
         }
 
         #region Binary Operation Visitors (Expressions produce no CFG edges)
