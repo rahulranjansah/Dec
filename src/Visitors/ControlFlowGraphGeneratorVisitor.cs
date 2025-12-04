@@ -19,6 +19,7 @@ using System.Text;
 using AST;
 using Containers;
 using Utilities;
+using Optimizer;
 
 namespace AST
 {
@@ -32,7 +33,7 @@ namespace AST
         /// <summary>
         /// Internal directed graph storing control-flow edges between statements.
         /// </summary>
-        private DiGraph<Statement>? CFG;
+        private CFG CFG;
 
         /// <summary>
         /// Constructs a new CFG generator and initializes the graph
@@ -42,7 +43,7 @@ namespace AST
         public ControlFlowGraphGeneratorVisitor()
         {
             // Create graph and add initial vertex (must not be a bare block “{”)
-            CFG = new DiGraph<Statement>();
+            CFG = new CFG();
         }
 
         #region Binary Operation Visitors (Expressions produce no CFG edges)
@@ -138,6 +139,8 @@ namespace AST
             // Add the new statement as a vertex
             CFG.AddVertex(node);
 
+            if (CFG.Start == null) { CFG.Start = node; }
+
             // Connect prior statement to this one (linear control flow)
             if (prev != null)
             {
@@ -155,6 +158,8 @@ namespace AST
             // Add return as a vertex
             CFG.AddVertex(node);
 
+            if (CFG.Start == null)  { CFG.Start = node; }
+
             // Link previous statement to this one if valid
             if (prev != null)
             {
@@ -168,40 +173,55 @@ namespace AST
         /// <summary>
         /// Visits each statement in a block sequentially, creating edges from one
         /// statement to the next. Control flow stops when encountering a return
-        /// statement. Unreachable statements are still added as vertices but receive no edges.
+        /// statement. Unreachable statements are still added as vertices and form
+        /// their own disjoint subgraph (no edges from the return to unreachable code).
         /// </summary>
         /// <param name="node">Block of sequential statements</param>
         /// <param name="prev">The statement executed before this block begins</param>
-        /// <returns>The final reachable statement encountered in block</returns>
+        /// <returns>The final reachable statement encountered in block (the return statement if one was hit)</returns>
         public Statement Visit(BlockStmt node, Statement prev)
         {
             // Begin with prior statement as the entry point for the block
             Statement lastStmt = prev;
+            // Track the last reachable statement (to return at the end)
+            Statement lastReachable = prev;
+            // Track whether we've hit a return (control flow terminator)
+            bool hitReturn = prev is ReturnStmt;
+            // Track the previous unreachable statement (for building unreachable chain)
+            Statement lastUnreachable = null;
 
             foreach (var stmt in node.Statements)
             {
-                // If a return has occurred earlier, subsequent statements are unreachable
-                if (lastStmt is ReturnStmt)
+                if (hitReturn)
                 {
-                    // Still represent unreachable statements in the graph
-                    if (stmt is AssignmentStmt || stmt is ReturnStmt)
+                    // After a return, subsequent statements are unreachable
+                    // They form their own disjoint subgraph
+                    Statement newLast = stmt.Accept(this, lastUnreachable);
+                    if (newLast != null)
                     {
-                        CFG.AddVertex(stmt);
+                        lastUnreachable = newLast;
                     }
-                    continue;
                 }
-
-                // Visit the next statement in sequence and update last reachable statement
-                Statement newLast = stmt.Accept(this, lastStmt);
-
-                if (newLast != null)
+                else
                 {
-                    lastStmt = newLast;
+                    // Normal control flow - visit with the previous statement
+                    Statement newLast = stmt.Accept(this, lastStmt);
+
+                    if (newLast != null)
+                    {
+                        lastStmt = newLast;
+                        lastReachable = newLast;
+                        // Check if we just hit a return statement
+                        if (lastStmt is ReturnStmt)
+                        {
+                            hitReturn = true;
+                        }
+                    }
                 }
             }
 
-            // The last meaningful statement in the block
-            return lastStmt;
+            // Return the last reachable statement (will be the return if one was hit)
+            return lastReachable;
         }
 
         #endregion

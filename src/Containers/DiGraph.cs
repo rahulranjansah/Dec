@@ -10,6 +10,9 @@
  */
 
 using System;
+using System.Drawing;
+using System.Xml;
+using Containers;
 
 namespace Containers
 {
@@ -201,6 +204,90 @@ namespace Containers
         public string ToString()
         {
             return $"Vertices: {VertexCount()} Edges: {EdgeCount()}. \n {_adjacencyList.ToString()}";
+        }
+
+        public DiGraph<T> Transpose() //Should reverse all edges
+        {
+            DiGraph<T> ReverseDiGraph = new DiGraph<T>();
+            foreach (T node in this._adjacencyList.Keys) //Add all the vertexes
+            {
+                ReverseDiGraph.AddVertex(node);
+            }
+            foreach (T node in this._adjacencyList.Keys) //Add all inv erse edges
+            {
+                foreach (T adjVal in this._adjacencyList[node])
+                {
+                    ReverseDiGraph.AddEdge(adjVal, node); //For each value, add the associated key to that value ex <3:4,5>, get index 3, and the value 3 gets sent to 4 and to 5 to reverse the digraph
+                }
+            }
+
+            //return new adj list
+            return ReverseDiGraph;
+        }
+
+        public enum Color
+        {
+            WHITE = 0,
+            PURPLE = 1,
+            BLACK = 2
+        }
+
+        private Dictionary<T, Color> colors;
+        private Dictionary<T, int> discoverytime;
+        private Dictionary<T, int> finaltime;
+        private Stack<T> finalstack;
+        private int time;
+
+        public Stack<T> DepthFirstSearch()
+        {
+            colors = new Dictionary<T, Color>();
+            discoverytime = new Dictionary<T, int>();
+            finaltime = new Dictionary<T, int>();
+            time = 0;
+            finalstack = new Stack<T>();
+
+            // color the vertices
+            foreach ( var node in GetVertices())
+            {
+                colors[node] = Color.WHITE;
+            }
+
+            // visit each unvisited vertex
+            foreach (var node in GetVertices())
+            {
+                if (colors[node] == Color.WHITE)
+                {
+                    DFS_Visit(node);
+                }
+            }
+
+            return finalstack;
+        }
+
+        /// <summary>
+        /// Internal DFS visit helper that recursively explores vertices.
+        /// </summary>
+        /// <param name="node">The vertex to visit</param>
+        private void DFS_Visit(T node)
+        {
+            colors[node] = Color.PURPLE;
+            time++;
+            discoverytime[node] = time;
+
+            // recursively visit all unvisited neighbors
+            foreach (T neighbor in GetNeighbors(node))
+            {
+                if (colors[neighbor] == Color.WHITE)
+                {
+                    DFS_Visit(neighbor);
+                }
+            }
+
+            // mark as finished and push to stack
+            colors[node] = Color.BLACK;
+            time++;
+            finaltime[node] = time;
+            finalstack.Push(node);
         }
     }
 }
