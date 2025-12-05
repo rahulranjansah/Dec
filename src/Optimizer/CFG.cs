@@ -12,7 +12,7 @@
  *
  * Example with unreachable code:
  *   Reachable:   [x := 1] → [return x]
- *   Unreachable: [y := 2]   [z := 3]  (no edges from reachable)
+ *   Unreachable: [y := 2]  -> [z := 3]  (no edges from reachable)
  *
  * @author Rahul, Rick, Zach
  */
