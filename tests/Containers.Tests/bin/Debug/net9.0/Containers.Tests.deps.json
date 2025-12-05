@@ -8,8 +8,12 @@
     ".NETCoreApp,Version=v9.0": {
       "Containers.Tests/1.0.0": {
         "dependencies": {
+          "AST": "1.0.0",
           "Containers": "1.0.0",
           "Microsoft.NET.Test.Sdk": "17.12.0",
+          "Optimizer": "1.0.0",
+          "Parsers": "1.0.0",
+          "Visitors": "1.0.0",
           "coverlet.collector": "6.0.2",
           "xunit": "2.9.2",
           "xunit.runner.visualstudio": "2.8.2"
@@ -341,9 +345,76 @@
         }
       },
       "xunit.runner.visualstudio/2.8.2": {},
+      "AST/1.0.0": {
+        "dependencies": {
+          "Containers": "1.0.0",
+          "Utilities": "1.0.0"
+        },
+        "runtime": {
+          "AST.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "Containers/1.0.0": {
         "runtime": {
           "Containers.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Optimizer/1.0.0": {
+        "dependencies": {
+          "AST": "1.0.0",
+          "Containers": "1.0.0"
+        },
+        "runtime": {
+          "Optimizer.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Parsers/1.0.0": {
+        "dependencies": {
+          "AST": "1.0.0",
+          "Containers": "1.0.0",
+          "Tokenizer": "1.0.0",
+          "Utilities": "1.0.0"
+        },
+        "runtime": {
+          "Parsers.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Tokenizer/1.0.0": {
+        "runtime": {
+          "Tokenizer.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Utilities/1.0.0": {
+        "runtime": {
+          "Utilities.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Visitors/1.0.0": {
+        "dependencies": {
+          "AST": "1.0.0",
+          "Optimizer": "1.0.0",
+          "Parsers": "1.0.0"
+        },
+        "runtime": {
+          "Visitors.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -462,7 +533,37 @@
       "path": "xunit.runner.visualstudio/2.8.2",
       "hashPath": "xunit.runner.visualstudio.2.8.2.nupkg.sha512"
     },
+    "AST/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "Containers/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Optimizer/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Parsers/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Tokenizer/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Utilities/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Visitors/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

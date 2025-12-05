@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Visitors\Visitors.csproj" />
+    <ProjectReference Include="..\..\src\Optimizer\Optimizer.csproj" />
   </ItemGroup>
 
 </Project>

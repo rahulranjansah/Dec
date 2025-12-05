@@ -412,6 +412,20 @@
           "build/net6.0/xunit.runner.visualstudio.props": {}
         }
       },
+      "AST/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "Containers": "1.0.0",
+          "Utilities": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/AST.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/AST.dll": {}
+        }
+      },
       "Containers/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
@@ -420,6 +434,71 @@
         },
         "runtime": {
           "bin/placeholder/Containers.dll": {}
+        }
+      },
+      "Optimizer/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "AST": "1.0.0",
+          "Containers": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Optimizer.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Optimizer.dll": {}
+        }
+      },
+      "Parsers/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "AST": "1.0.0",
+          "Containers": "1.0.0",
+          "Tokenizer": "1.0.0",
+          "Utilities": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Parsers.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Parsers.dll": {}
+        }
+      },
+      "Tokenizer/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/Tokenizer.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Tokenizer.dll": {}
+        }
+      },
+      "Utilities/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/Utilities.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Utilities.dll": {}
+        }
+      },
+      "Visitors/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "AST": "1.0.0",
+          "Optimizer": "1.0.0",
+          "Parsers": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Visitors.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Visitors.dll": {}
         }
       }
     }
@@ -943,16 +1022,50 @@
         "xunit.runner.visualstudio.nuspec"
       ]
     },
+    "AST/1.0.0": {
+      "type": "project",
+      "path": "../../src/AST/AST.csproj",
+      "msbuildProject": "../../src/AST/AST.csproj"
+    },
     "Containers/1.0.0": {
       "type": "project",
       "path": "../../src/Containers/Containers.csproj",
       "msbuildProject": "../../src/Containers/Containers.csproj"
+    },
+    "Optimizer/1.0.0": {
+      "type": "project",
+      "path": "../../src/Optimizer/Optimizer.csproj",
+      "msbuildProject": "../../src/Optimizer/Optimizer.csproj"
+    },
+    "Parsers/1.0.0": {
+      "type": "project",
+      "path": "../../src/Parsers/Parsers.csproj",
+      "msbuildProject": "../../src/Parsers/Parsers.csproj"
+    },
+    "Tokenizer/1.0.0": {
+      "type": "project",
+      "path": "../../src/Tokenizer/Tokenizer.csproj",
+      "msbuildProject": "../../src/Tokenizer/Tokenizer.csproj"
+    },
+    "Utilities/1.0.0": {
+      "type": "project",
+      "path": "../../src/Utilities/Utilities.csproj",
+      "msbuildProject": "../../src/Utilities/Utilities.csproj"
+    },
+    "Visitors/1.0.0": {
+      "type": "project",
+      "path": "../../src/Visitors/Visitors.csproj",
+      "msbuildProject": "../../src/Visitors/Visitors.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net9.0": [
+      "AST >= 1.0.0",
       "Containers >= 1.0.0",
       "Microsoft.NET.Test.Sdk >= 17.12.0",
+      "Optimizer >= 1.0.0",
+      "Parsers >= 1.0.0",
+      "Visitors >= 1.0.0",
       "coverlet.collector >= 6.0.2",
       "xunit >= 2.9.2",
       "xunit.runner.visualstudio >= 2.8.2"
@@ -983,8 +1096,20 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
+            "/mnt/hardisk/Dec/src/AST/AST.csproj": {
+              "projectPath": "/mnt/hardisk/Dec/src/AST/AST.csproj"
+            },
             "/mnt/hardisk/Dec/src/Containers/Containers.csproj": {
               "projectPath": "/mnt/hardisk/Dec/src/Containers/Containers.csproj"
+            },
+            "/mnt/hardisk/Dec/src/Optimizer/Optimizer.csproj": {
+              "projectPath": "/mnt/hardisk/Dec/src/Optimizer/Optimizer.csproj"
+            },
+            "/mnt/hardisk/Dec/src/Parsers/Parsers.csproj": {
+              "projectPath": "/mnt/hardisk/Dec/src/Parsers/Parsers.csproj"
+            },
+            "/mnt/hardisk/Dec/src/Visitors/Visitors.csproj": {
+              "projectPath": "/mnt/hardisk/Dec/src/Visitors/Visitors.csproj"
             }
           }
         }

@@ -201,30 +201,15 @@ namespace Containers
         /// <summary>
         /// Returns a high-level string summary of the graph's vertex and edge count.
         /// </summary>
-        public string ToString()
+        public override string ToString()
         {
             return $"Vertices: {VertexCount()} Edges: {EdgeCount()}. \n {_adjacencyList.ToString()}";
         }
 
-        public DiGraph<T> Transpose() //Should reverse all edges
-        {
-            DiGraph<T> ReverseDiGraph = new DiGraph<T>();
-            foreach (T node in this._adjacencyList.Keys) //Add all the vertexes
-            {
-                ReverseDiGraph.AddVertex(node);
-            }
-            foreach (T node in this._adjacencyList.Keys) //Add all inv erse edges
-            {
-                foreach (T adjVal in this._adjacencyList[node])
-                {
-                    ReverseDiGraph.AddEdge(adjVal, node); //For each value, add the associated key to that value ex <3:4,5>, get index 3, and the value 3 gets sent to 4 and to 5 to reverse the digraph
-                }
-            }
-
-            //return new adj list
-            return ReverseDiGraph;
-        }
-
+        /// <summary>
+        /// Color states for DFS/BFS graph traversal.
+        /// WHITE = unvisited, PURPLE = discovered/in-progress, BLACK = finished
+        /// </summary>
         public enum Color
         {
             WHITE = 0,
@@ -232,12 +217,31 @@ namespace Containers
             BLACK = 2
         }
 
+        // DFS state variables (used by DepthFirstSearch and FindStronglyConnectedComponents)
         private Dictionary<T, Color> colors;
         private Dictionary<T, int> discoverytime;
         private Dictionary<T, int> finaltime;
         private Stack<T> finalstack;
         private int time;
 
+        /// <summary>
+        /// Performs Depth-First Search on the entire graph.
+        ///
+        /// Key Properties:
+        /// - Visits ALL vertices (including disconnected components)
+        /// - Returns stack with vertices in finish-time order
+        /// - First vertex to START is LAST to FINISH (at top of stack)
+        ///
+        /// Algorithm:
+        /// 1. Initialize all vertices as WHITE
+        /// 2. For each WHITE vertex, start a new DFS tree
+        /// 3. DFS_Visit recursively explores neighbors
+        /// 4. When a vertex finishes, push it to stack
+        ///
+        /// Note: Unlike BFS (which uses Start), DFS iterates through ALL vertices.
+        /// This is essential for Kosaraju's SCC algorithm.
+        /// </summary>
+        /// <returns>Stack of vertices in finish-time order (last finished on top)</returns>
         public Stack<T> DepthFirstSearch()
         {
             colors = new Dictionary<T, Color>();
@@ -288,6 +292,120 @@ namespace Containers
             time++;
             finaltime[node] = time;
             finalstack.Push(node);
+        }
+
+        /// <summary>
+        /// Creates a transposed (reversed) graph where all edges are flipped.
+        ///
+        /// Original:   A → B → C
+        /// Transposed: A ← B ← C  (i.e., C → B → A)
+        ///
+        /// Key Property: SCCs remain the same in transposed graph,
+        /// but source SCCs become sink SCCs and vice versa.
+        ///
+        /// Used in Kosaraju's algorithm (step 2).
+        /// </summary>
+        /// <returns>New DiGraph with all edges reversed</returns>
+        public DiGraph<T> Transpose()
+        {
+            DiGraph<T> ReverseDiGraph = new DiGraph<T>();
+
+            // Add all vertices (same as original)
+            foreach (T node in this._adjacencyList.Keys)
+            {
+                ReverseDiGraph.AddVertex(node);
+            }
+
+            // Add all edges in reverse direction
+            // Original: A → B becomes Transposed: B → A
+            foreach (T node in this._adjacencyList.Keys)
+            {
+                foreach (T adjVal in this._adjacencyList[node])
+                {
+                    ReverseDiGraph.AddEdge(adjVal, node);
+                }
+            }
+
+            return ReverseDiGraph;
+        }
+
+        /// <summary>
+        /// Finds all Strongly Connected Components using Kosaraju's algorithm.
+        ///
+        /// A Strongly Connected Component (SCC) is a maximal set of vertices
+        /// where every vertex can reach every other vertex.
+        ///
+        /// Kosaraju's Algorithm:
+        /// 1. Run DFS on original graph → get finish-time stack
+        /// 2. Transpose the graph (reverse all edges)
+        /// 3. Process vertices in finish-time order (pop from stack)
+        /// 4. Each DFS tree in step 3 is one SCC
+        ///
+        /// Example:
+        ///     A → B
+        ///     ↑   ↓
+        ///     D ← C → E        F ⟷ G
+        ///
+        /// SCCs: {A,B,C,D}, {E}, {F,G}
+        ///
+        /// Why it works:
+        /// - Vertices that finish last in step 1 are from source SCCs
+        /// - After transpose, source SCCs become sink SCCs
+        /// - DFS from sink SCCs can't escape to other SCCs
+        /// </summary>
+        /// <returns>List of SCCs, each SCC is a list of vertices</returns>
+        public List<List<T>> FindStronglyConnectedComponents()
+        {
+            // Step 1: Run DFS on original graph to get finish-time ordering
+            Stack<T> originalGraph = DepthFirstSearch();
+
+            // Step 2: Create transposed graph (reverse all edges)
+            DiGraph<T> transposedGraph = Transpose();
+
+            List<List<T>> SCCs = new List<List<T>>();
+
+            // Step 3: Reset colors for second DFS pass
+            colors = new Dictionary<T, Color>();
+            foreach (T node in transposedGraph.GetVertices())
+            {
+                colors[node] = Color.WHITE;
+            }
+
+            // Step 4: Process vertices in finish-time order (pop from stack)
+            // Each time we start from an unvisited vertex, we find one SCC
+            foreach (T vertex in originalGraph)
+            {
+                if (colors[vertex] == Color.WHITE)
+                {
+                    // Collect all vertices reachable in transposed graph = one SCC
+                    List<T> SCCelement = new List<T>();
+                    CollectSCC(transposedGraph, vertex, SCCelement);
+                    SCCs.Add(SCCelement);
+                }
+            }
+            return SCCs;
+        }
+
+        /// <summary>
+        /// Helper for Kosaraju's algorithm - collects all vertices in one SCC.
+        /// Performs DFS on transposed graph, adding visited vertices to the SCC list.
+        /// </summary>
+        /// <param name="transposedGraph">The transposed graph to traverse</param>
+        /// <param name="vertex">Current vertex being visited</param>
+        /// <param name="SCC">List to collect SCC members</param>
+        private void CollectSCC(DiGraph<T> transposedGraph, T vertex, List<T> SCC)
+        {
+            colors[vertex] = Color.BLACK;  // Mark as visited
+            SCC.Add(vertex);               // Add to current SCC
+
+            // Recursively visit all WHITE neighbors in transposed graph
+            foreach (T neighbor in transposedGraph.GetNeighbors(vertex))
+            {
+                if (colors[neighbor] == Color.WHITE)
+                {
+                    CollectSCC(transposedGraph, neighbor, SCC);
+                }
+            }
         }
     }
 }

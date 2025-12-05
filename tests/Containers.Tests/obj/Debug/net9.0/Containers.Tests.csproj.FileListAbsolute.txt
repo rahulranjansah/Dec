@@ -100,3 +100,15 @@
 /mnt/hardisk/Dec/tests/Containers.Tests/obj/Debug/net9.0/Containers.Tests.pdb
 /mnt/hardisk/Dec/tests/Containers.Tests/obj/Debug/net9.0/Containers.Tests.genruntimeconfig.cache
 /mnt/hardisk/Dec/tests/Containers.Tests/obj/Debug/net9.0/ref/Containers.Tests.dll
+/mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/AST.dll
+/mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/Optimizer.dll
+/mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/Parsers.dll
+/mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/Tokenizer.dll
+/mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/Utilities.dll
+/mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/Visitors.dll
+/mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/AST.pdb
+/mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/Parsers.pdb
+/mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/Visitors.pdb
+/mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/Optimizer.pdb
+/mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/Tokenizer.pdb
+/mnt/hardisk/Dec/tests/Containers.Tests/bin/Debug/net9.0/Utilities.pdb

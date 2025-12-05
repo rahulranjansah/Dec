@@ -20,6 +20,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Optimizer\Optimizer.csproj" />
+    <ProjectReference Include="..\..\src\Parsers\Parsers.csproj" />
+    <ProjectReference Include="..\..\src\Visitors\Visitors.csproj" />
+    <ProjectReference Include="..\..\src\Tokenizer\Tokenizer.csproj" />
   </ItemGroup>
 
 </Project>

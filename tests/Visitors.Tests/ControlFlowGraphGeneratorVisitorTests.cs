@@ -35,51 +35,6 @@ namespace AST.Tests
 
         #endregion
 
-        #region Constructor Tests
-
-        [Fact(DisplayName = "Constructor should initialize CFG with start vertex")]
-        public void Constructor_ShouldInitializeCFGWithStartVertex()
-        {
-            var start = CreateAssignment("x", 1);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
-            var cfg = visitor.GetCFG();
-
-            Assert.NotNull(cfg);
-            Assert.Equal(1, cfg.VertexCount());
-            Assert.Contains(start, cfg.GetVertices());
-        }
-
-        [Fact(DisplayName = "Constructor should throw ArgumentNullException for null start")]
-        public void Constructor_ShouldThrowArgumentNullException_ForNullStart()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                new ControlFlowGraphGeneratorVisitor(null!));
-        }
-
-        [Theory(DisplayName = "Constructor should work with different statement types")]
-        [InlineData(typeof(AssignmentStmt))]
-        [InlineData(typeof(ReturnStmt))]
-        public void Constructor_ShouldWorkWithDifferentStatementTypes(Type stmtType)
-        {
-            Statement start;
-            if (stmtType == typeof(AssignmentStmt))
-            {
-                start = CreateAssignment("x", 1);
-            }
-            else
-            {
-                start = CreateReturn(42);
-            }
-
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
-            var cfg = visitor.GetCFG();
-
-            Assert.Equal(1, cfg.VertexCount());
-            Assert.Contains(start, cfg.GetVertices());
-        }
-
-        #endregion
-
         #region AssignmentStmt Visit Tests
 
         [Fact(DisplayName = "Visit AssignmentStmt should add vertex and edge when prev is not null")]
@@ -87,7 +42,8 @@ namespace AST.Tests
         {
             var start = CreateAssignment("x", 1);
             var stmt = CreateAssignment("y", 2);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = visitor.Visit(stmt, start);
             var cfg = visitor.GetCFG();
@@ -102,14 +58,16 @@ namespace AST.Tests
         {
             var start = CreateAssignment("x", 1);
             var stmt = CreateAssignment("y", 2);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = visitor.Visit(stmt, null!);
             var cfg = visitor.GetCFG();
 
             Assert.Equal(stmt, result);
             Assert.Equal(2, cfg.VertexCount());
-            Assert.False(cfg.HasEdge(null!, stmt)); // No edge from null
+            // Both vertices exist but no edge between them
+            Assert.Equal(0, cfg.EdgeCount());
         }
 
         [Fact(DisplayName = "Visit AssignmentStmt should return the statement itself")]
@@ -117,7 +75,8 @@ namespace AST.Tests
         {
             var start = CreateAssignment("x", 1);
             var stmt = CreateAssignment("y", 2);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = visitor.Visit(stmt, start);
 
@@ -131,7 +90,8 @@ namespace AST.Tests
             var stmt1 = CreateAssignment("x", 1);
             var stmt2 = CreateAssignment("y", 2);
             var stmt3 = CreateAssignment("z", 3);
-            var visitor = new ControlFlowGraphGeneratorVisitor(stmt1);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(stmt1, null);
 
             visitor.Visit(stmt2, stmt1);
             visitor.Visit(stmt3, stmt2);
@@ -152,7 +112,8 @@ namespace AST.Tests
         {
             var start = CreateAssignment("x", 1);
             var returnStmt = CreateReturn(42);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = visitor.Visit(returnStmt, start);
             var cfg = visitor.GetCFG();
@@ -167,7 +128,8 @@ namespace AST.Tests
         {
             var start = CreateAssignment("x", 1);
             var returnStmt = CreateReturn(42);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = visitor.Visit(returnStmt, null!);
             var cfg = visitor.GetCFG();
@@ -181,7 +143,8 @@ namespace AST.Tests
         {
             var start = CreateAssignment("x", 1);
             var returnStmt = CreateReturn(42);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = visitor.Visit(returnStmt, start);
 
@@ -194,7 +157,8 @@ namespace AST.Tests
         {
             var start = CreateAssignment("x", 1);
             var returnStmt = CreateReturn(42);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             visitor.Visit(returnStmt, start);
             var cfg = visitor.GetCFG();
@@ -221,7 +185,8 @@ namespace AST.Tests
             var left = new LiteralNode(1);
             var right = new LiteralNode(2);
             var node = (ExpressionNode)Activator.CreateInstance(nodeType, left, right)!;
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = node.Accept(visitor, start);
             var cfg = visitor.GetCFG();
@@ -235,7 +200,8 @@ namespace AST.Tests
         {
             var start = CreateAssignment("x", 1);
             var literal = new LiteralNode(42);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = visitor.Visit(literal, start);
             var cfg = visitor.GetCFG();
@@ -249,7 +215,8 @@ namespace AST.Tests
         {
             var start = CreateAssignment("x", 1);
             var variable = new VariableNode("y");
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = visitor.Visit(variable, start);
             var cfg = visitor.GetCFG();
@@ -267,7 +234,8 @@ namespace AST.Tests
         {
             var start = CreateAssignment("x", 1);
             var block = CreateBlock();
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = visitor.Visit(block, start);
             var cfg = visitor.GetCFG();
@@ -282,7 +250,8 @@ namespace AST.Tests
             var start = CreateAssignment("x", 1);
             var innerStmt = CreateAssignment("y", 2);
             var block = CreateBlock(innerStmt);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = visitor.Visit(block, start);
             var cfg = visitor.GetCFG();
@@ -300,7 +269,8 @@ namespace AST.Tests
             var stmt2 = CreateAssignment("b", 20);
             var stmt3 = CreateAssignment("c", 30);
             var block = CreateBlock(stmt1, stmt2, stmt3);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = visitor.Visit(block, start);
             var cfg = visitor.GetCFG();
@@ -312,7 +282,7 @@ namespace AST.Tests
             Assert.True(cfg.HasEdge(stmt2, stmt3));
         }
 
-        [Fact(DisplayName = "Visit BlockStmt with return should stop flow after return")]
+        [Fact(DisplayName = "Visit BlockStmt with return should stop flow - unreachable code is disjoint")]
         public void Visit_BlockStmtWithReturn_ShouldStopFlowAfterReturn()
         {
             var start = CreateAssignment("x", 1);
@@ -320,16 +290,21 @@ namespace AST.Tests
             var returnStmt = CreateReturn(42);
             var stmt2 = CreateAssignment("b", 20); // Unreachable
             var block = CreateBlock(stmt1, returnStmt, stmt2);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = visitor.Visit(block, start);
             var cfg = visitor.GetCFG();
 
+            // Block returns the return statement (last reachable statement)
             Assert.Equal(returnStmt, result);
             Assert.True(cfg.HasEdge(start, stmt1));
             Assert.True(cfg.HasEdge(stmt1, returnStmt));
-            // stmt2 should be added as unreachable vertex
+            // stmt2 should be added as vertex but NO edge from return (disjoint)
             Assert.Contains(stmt2, cfg.GetVertices());
+            Assert.False(cfg.HasEdge(returnStmt, stmt2));
+            // Return has no outgoing edges
+            Assert.Empty(cfg.GetNeighbors(returnStmt));
         }
 
         [Fact(DisplayName = "Visit nested BlockStmt should create correct flow")]
@@ -340,7 +315,8 @@ namespace AST.Tests
             var stmt2 = CreateAssignment("b", 20);
             var innerBlock = CreateBlock(stmt2);
             var outerBlock = CreateBlock(stmt1, innerBlock);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = visitor.Visit(outerBlock, start);
             var cfg = visitor.GetCFG();
@@ -362,7 +338,8 @@ namespace AST.Tests
             var innerMost = CreateBlock(stmt3);
             var middle = CreateBlock(stmt2, innerMost);
             var outer = CreateBlock(stmt1, middle);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = visitor.Visit(outer, start);
             var cfg = visitor.GetCFG();
@@ -380,7 +357,8 @@ namespace AST.Tests
             var start = CreateAssignment("x", 1);
             var stmt = CreateAssignment("y", 2);
             var block = CreateBlock(stmt);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = visitor.Visit(block, null!);
             var cfg = visitor.GetCFG();
@@ -406,7 +384,8 @@ namespace AST.Tests
 
             var innerBlock = CreateBlock(stmt3, stmt4);
             var outerBlock = CreateBlock(stmt1, stmt2, innerBlock, returnStmt);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = visitor.Visit(outerBlock, start);
             var cfg = visitor.GetCFG();
@@ -430,7 +409,8 @@ namespace AST.Tests
             var stmt2 = CreateAssignment("after", 4);
 
             var block = CreateBlock(blockStmt1, blockStmt2);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             visitor.Visit(stmt1, start);
             visitor.Visit(block, stmt1);
@@ -454,7 +434,8 @@ namespace AST.Tests
                 statements.Add(CreateAssignment($"var{i}", i));
             }
 
-            var visitor = new ControlFlowGraphGeneratorVisitor(statements[0]);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(statements[0], null);
 
             for (int i = 1; i < 100; i++)
             {
@@ -476,7 +457,8 @@ namespace AST.Tests
         {
             var start = CreateAssignment("x", 1);
             var stmt = CreateAssignment("y", 2);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             visitor.Visit(stmt, start);
             visitor.Visit(stmt, start);
@@ -491,7 +473,8 @@ namespace AST.Tests
             var start = CreateAssignment("x", 1);
             var returnStmt = CreateReturn(42);
             var block = CreateBlock(returnStmt);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var result = visitor.Visit(block, start);
             var cfg = visitor.GetCFG();
@@ -505,7 +488,8 @@ namespace AST.Tests
         public void GetCFG_ShouldReturnNonNullGraph()
         {
             var start = CreateAssignment("x", 1);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             var cfg = visitor.GetCFG();
 
@@ -519,7 +503,8 @@ namespace AST.Tests
             var stmt1 = CreateAssignment("a", 10);
             var stmt2 = CreateAssignment("b", 20);
             var stmt3 = CreateAssignment("c", 30);
-            var visitor = new ControlFlowGraphGeneratorVisitor(start);
+            var visitor = new ControlFlowGraphGeneratorVisitor();
+            visitor.Visit(start, null);
 
             visitor.Visit(stmt1, start);
             visitor.Visit(stmt2, stmt1);

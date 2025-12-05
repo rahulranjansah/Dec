@@ -20,6 +20,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Containers\Containers.csproj" />
+    <ProjectReference Include="..\..\src\AST\AST.csproj" />
+    <ProjectReference Include="..\..\src\Parsers\Parsers.csproj" />
+    <ProjectReference Include="..\..\src\Visitors\Visitors.csproj" />
+    <ProjectReference Include="..\..\src\Optimizer\Optimizer.csproj" />
   </ItemGroup>
 
 </Project>
