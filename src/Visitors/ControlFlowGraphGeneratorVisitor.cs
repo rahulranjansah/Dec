@@ -199,7 +199,10 @@ namespace AST
                     Statement newLast = stmt.Accept(this, lastUnreachable);
                     if (newLast != null)
                     {
-                        lastUnreachable = newLast;
+                        // If this unreachable statement is a return, it terminates
+                        // and creates a disconnected vertex (no edge to next statement)
+                        if (newLast is ReturnStmt) { lastUnreachable = null; }
+                        else { lastUnreachable = newLast; }
                     }
                 }
                 else
